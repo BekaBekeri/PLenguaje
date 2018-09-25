@@ -1,0 +1,54 @@
+define id_alphabet_1 {
+	in := alphabet;
+	out := alphabet;
+}
+
+automaton id_automaton_1 (id_alphabet_1) {
+	states := state_id|output, state_id|output, state_id|output;
+	initial := state_id;
+	transitions{
+		state_id -> state_id|input, state_id|input, state_id|input;
+		state_id -> state_id|input, state_id|input;
+	}
+}
+		
+automaton id_automaton_2 (id_alphabet_1) {
+	states := state_id|output, state_id|output, state_id|output;
+	initial := state_id;
+	transitions{
+		state_id -> state_id|input, state_id|input, state_id|input;
+		state_id -> state_id|input, state_id|input;
+	}
+}
+
+automaton id_automaton_3 (id_alphabet_1) {
+	states := state_id|output, state_id|output, state_id|output;
+	initial := state_id;
+	transitions{
+		state_id -> state_id|input, state_id|input, state_id|input;
+		state_id -> state_id|input, state_id|input;
+	}
+}
+
+define id_alphabet_2 {
+	in := alphabet;
+	out := alphabet;
+}
+
+automaton id_automaton_4 (id_alphabet_2) {
+	states := state_id|output, state_id|output, state_id|output;
+	initial := state_id;
+	transitions{
+		state_id -> state_id|input, state_id|input, state_id|input;
+		state_id -> state_id|input, state_id|input;
+	}
+}
+
+automaton id_automaton_5 (id_alphabet_2) {
+	states := state_id|output, state_id|output, state_id|output;
+	initial := state_id;
+	transitions{
+		state_id -> state_id|input, state_id|input, state_id|input;
+		state_id -> state_id|input, state_id|input;
+	}
+}
