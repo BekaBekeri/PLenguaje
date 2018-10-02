@@ -1,0 +1,22 @@
+REUNION 25/09/2018
+
+	Hora de inicio de la reunion: 16:15
+	Hora de fin de la reunion: 18:25
+
+	Objetivos de la reunion: En la primera reunion decidimos el lenguaje que ibamos a utilizar
+		como lenguaje origen, en esta reunion estamos viendo un ejemplo de maquina de moore
+		escrita en Java desarrollado por Juanjo para ver la portabilidad que tendria y si es
+		un buen lenguaje objeto Java. Tambien planeamos pasar la descripcion de nuestro 
+		lenguaje a EBNF (Extended Backus-Naur form).
+
+	
+	Decisiones tomadas: Hemos retocado aspectos profundos del lenguaje que no habiamos previsto en
+		la primera reunion, hemos llevado a cabo el paso del lenguaje a EBNF y a parte hemos 
+		seleccionado Java como Lenguaje Objeto del proyecto definitivamente.
+
+
+	Miembros reunidos: 
+		Juan Jose Corroto
+		Javier Cordoba
+		Fernando Vallejo	
+		Beka Bekeri
