@@ -1,6 +1,6 @@
 define id_alphabet_1 {
-	in := alphabet;
-	out := alphabet;
+	in := event, event, event;
+	out := id1, id2;
 }
 
 automaton id_automaton_1 (id_alphabet_1) {
@@ -11,7 +11,10 @@ automaton id_automaton_1 (id_alphabet_1) {
 		state_id -> state_id|input, state_id|input;
 	}
 }
-		
+
+output id1 := "CODIGO";
+output id2 := "CODIGO";
+
 automaton id_automaton_2 (id_alphabet_1) {
 	states := state_id|output, state_id|output, state_id|output;
 	initial := state_id;
