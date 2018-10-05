@@ -12,8 +12,8 @@ automaton id_automaton_1 (id_alphabet_1) {
 	}
 }
 
-output id1 := "CODIGO";
-output id2 := "CODIGO";
+output id1 := {:CODIGO:};
+output id2 := {:CODIGO:};
 
 automaton id_automaton_2 (id_alphabet_1) {
 	states := state_id|output, state_id|output, state_id|output;
