@@ -1,5 +1,5 @@
 define alfabetos1{
-    in := Event1, Event2;
+    in := 1, 2;
     out := code1, code2;
 }
 
