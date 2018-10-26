@@ -1,12 +1,11 @@
-PROGRAM ::= DEFINE,{BLOCK};
-BLOCK ::= DEFINE|AUTOMATON|OUTPUT;
+PROGRAM ::= {OUTPUT} {DEFINE} {AUTOMATON};
 DEFINE ::= "define" IDENT "{" ENTRADA ";" SALIDA ";" "}";
 AUTOMATON ::= "automaton" IDENT "(" IDENT ")" "{" STATES ";" INITIAL ";" TRANSITIONS "}";
-ENTRADA ::= "in" ":=" {INPUT};
-SALIDA ::= "out" ":=" ALFABETO;
-STATES ::= "states" ":=" [{IDENT "|" INPUT,}|epsilon] IDENT "|" INPUT;
+ENTRADA ::= "in" ":=" {EVENTO","}[EVENTO];
+SALIDA ::= "out" ":=" {IDENT","}[IDENT];
+STATES ::= "states" ":=" [{IDENT "|" EVENTO,}] IDENT "|" EVENTO;
 INITIAL ::= "initial" ":=" IDENT;
-TRANSITIONS ::= "transitions" "{" {IDENT "->" [{IDENT "|" INPUT,}|e] IDENT "|" INPUT ";" } "}";
+TRANSITIONS ::= "transitions" "{" {IDENT "|" {EVENTO,}EVENTO "->" IDENT ";"} "}";
 IDENT ::= LETRA {LETRA|DIGITO};
 LETRA ::= "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "H" | "I" | "J" | "K" | "L" | "M" | "N"
@@ -17,7 +16,6 @@ LETRA ::= "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "q" | "r" | "s" | "t" | "u" | "v" | "w"
        | "x" | "y" | "z" ;
 DIGITO ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
-INPUT ::= {EVENT,|epsilon};
 EVENTO ::= (1|2|3|4|5|6|7|8|9){DIGITO};
 OUTPUT ::= "output" ":=" CODIGO ";";
-CODIGO ::= "{:" {.} ":}";
+CODIGO ::= "{:" {ASCII} ":}";
