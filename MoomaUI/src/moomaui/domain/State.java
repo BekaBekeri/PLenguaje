@@ -3,6 +3,7 @@ package moomaui.domain;
 public class State {
 	protected int ID;
 	protected String name;
+	private OutputInterface action;
 	
 	public State(int ID) {
 		this.ID = ID;
@@ -34,5 +35,13 @@ public class State {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public OutputInterface getAction() {
+		return action;
+	}
+
+	public void setAction(OutputInterface action) {
+		this.action = action;
 	}
 }

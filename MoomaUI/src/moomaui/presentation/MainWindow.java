@@ -1,4 +1,5 @@
 package moomaui.presentation;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -6,19 +7,10 @@ import java.awt.BorderLayout;
 
 import javax.swing.JToolBar;
 
-import moomaui.domain.DrawableState;
-import moomaui.domain.DrawableTransition;
-import moomaui.domain.MooreMachine;
-
-import java.awt.event.MouseEvent;
 import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -27,15 +19,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import javax.swing.JPanel;
-import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 
 public class MainWindow {
 
 	private JFrame frame;
-	private JToolBar toolBar;
-	private JButton button;
 	private LinkedList<MachinePanel> machinePanels = new LinkedList<MachinePanel>();
 	private JTabbedPane pnlMachines;
 	private final static Logger ROOT_LOGGER = Logger.getLogger("moomaui");
@@ -78,6 +66,8 @@ public class MainWindow {
 	public MainWindow() {
 		initialize();
 		initializeMachines();
+		
+		frame.setTitle("Mooma UI");
 	}
 
 	/**
@@ -88,12 +78,6 @@ public class MainWindow {
 		frame.setBounds(100, 100, 706, 660);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		
-		toolBar = new JToolBar();
-		frame.getContentPane().add(toolBar, BorderLayout.NORTH);
-		
-		button = new JButton("New button");
-		frame.getContentPane().add(button, BorderLayout.SOUTH);
 		
 		pnlMachines = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(pnlMachines, BorderLayout.CENTER);

@@ -50,6 +50,9 @@ public class MachinePanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			DrawableState st = lblMachineCanvas.getStateInPosition(e.getX(), e.getY());
+			if (st != null && st.getAction() != null) { // TODO: Remove code
+				st.getAction().output(st.getName());
+			}
 			if (st != null) {
 				lblMachineCanvas.setText("Single Click  State: " + st.getName());
 				lblMachineCanvas.setSelectedState(st);

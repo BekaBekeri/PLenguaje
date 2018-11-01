@@ -26,6 +26,8 @@ public class Machines {
 		DrawableTransition t3 = new DrawableTransition(st4, st5);
 		DrawableTransition t4 = new DrawableTransition(st3, st1);
 		
+		st1.setAction((String a) -> System.out.print(a));
+		
 		machine.addState(st1);machine.addState(st2);machine.addState(st3);machine.addState(st4);machine.addState(st5);
 		machine.addTransition(t1);machine.addTransition(t2);machine.addTransition(t3);machine.addTransition(t4);
 		
