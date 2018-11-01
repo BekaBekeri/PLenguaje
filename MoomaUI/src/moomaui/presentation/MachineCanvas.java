@@ -35,18 +35,16 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 	
 	@Override
 	public boolean addState(DrawableState state) {
-		DrawableState st = (DrawableState) state;
-		if (mMachine.addState(st)) {
-			this.addGraphicObject(st);
+		if (mMachine.addState(state)) {
+			this.addGraphicObject(state);
 			return true;
 		}
 		return false;
 	}
 	@Override
 	public boolean addTransition(DrawableTransition transition) {
-		DrawableTransition t = (DrawableTransition) transition;
-		if (mMachine.addTransition(t)) {
-			this.addGraphicObject(t);
+		if (mMachine.addTransition(transition)) {
+			this.addGraphicObject(transition);
 			return true;
 		}
 		return false;

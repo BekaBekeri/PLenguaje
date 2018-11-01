@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +53,19 @@ public class JDrawer extends JLabel {
 	
 	public void paint(Graphics g){
 		super.paint(g);
+		setAntialias(g);
 		drawImage(g);		
+	}
+	
+	private void setAntialias(Graphics g) {
+		Graphics2D g2 = (Graphics2D)g;
+	    RenderingHints rh = new RenderingHints(
+	             RenderingHints.KEY_ANTIALIASING,
+	             RenderingHints.VALUE_ANTIALIAS_ON);
+	    rh.add(new RenderingHints(
+	             RenderingHints.KEY_TEXT_ANTIALIASING,
+	             RenderingHints.VALUE_TEXT_ANTIALIAS_ON));
+	    g2.setRenderingHints(rh);
 	}
 	
 	public void drawImage(Graphics g) {
