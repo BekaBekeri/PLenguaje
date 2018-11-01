@@ -1,4 +1,4 @@
-package domain;
+package moomaui.domain;
 
 public class State {
 	protected int ID;

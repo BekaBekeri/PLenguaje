@@ -1,13 +1,12 @@
-package presentation;
+package moomaui.presentation;
 
 import java.util.LinkedList;
 
-import domain.DrawableState;
-import domain.DrawableTransition;
-import domain.IMooreMachine;
-import domain.MooreMachine;
-
-import drawing.JDrawer;
+import moomaui.domain.DrawableState;
+import moomaui.domain.DrawableTransition;
+import moomaui.domain.IMooreMachine;
+import moomaui.domain.MooreMachine;
+import moomaui.drawing.JDrawer;
 
 public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableState, DrawableTransition> {
 	private static final long serialVersionUID = 1L;

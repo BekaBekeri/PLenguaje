@@ -1,4 +1,4 @@
-package presentation;
+package moomaui.presentation;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -6,21 +6,26 @@ import java.awt.BorderLayout;
 
 import javax.swing.JToolBar;
 
-import domain.DrawableState;
-import domain.DrawableTransition;
-import domain.MooreMachine;
+import moomaui.domain.DrawableState;
+import moomaui.domain.DrawableTransition;
+import moomaui.domain.MooreMachine;
 
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseMotionAdapter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.swing.JPanel;
 import java.awt.CardLayout;
@@ -33,8 +38,8 @@ public class MainWindow {
 	private JButton button;
 	private LinkedList<MachinePanel> machinePanels = new LinkedList<MachinePanel>();
 	private JTabbedPane pnlMachines;
-	private final static Logger ROOT_LOGGER = Logger.getLogger("presentation.MainWindow");
-	private final static Logger LOGGER = Logger.getLogger("presentation.MainWindow");
+	private final static Logger ROOT_LOGGER = Logger.getLogger("moomaui");
+	private final static Logger LOGGER = Logger.getLogger("moomaui.presentation.MainWindow");
 
 	/**
 	 * Launch the application.
@@ -43,6 +48,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					setUpLoggers();
 					MainWindow window = new MainWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
@@ -51,7 +57,21 @@ public class MainWindow {
 			}
 		});
 	}
+	
+	private static void setUpLoggers() throws SecurityException, IOException {
+		Handler consoleHandler = new ConsoleHandler();
+		Handler fileHandler = new FileHandler("./mooma.log", false);
+		SimpleFormatter simpleFormatter = new SimpleFormatter();
+		fileHandler.setFormatter(simpleFormatter);
 
+		ROOT_LOGGER.addHandler(consoleHandler);
+		ROOT_LOGGER.addHandler(fileHandler);
+
+		consoleHandler.setLevel(Level.ALL);
+		fileHandler.setLevel(Level.ALL);
+		
+		LOGGER.log(Level.INFO, "Mooma loggers initialized");
+	}
 	/**
 	 * Create the application.
 	 */
@@ -95,7 +115,7 @@ public class MainWindow {
 				MachinePanel pnl = new MachinePanel(machine);
 				machinePanels.add(pnl);
 				pnlMachines.addTab(machine.getMachineName(), pnl);
-				LOGGER.log(Level.INFO, String.format("%s added with method %s\n", machine.getMachineName(), machineGenerator.getName()));
+				LOGGER.log(Level.INFO, String.format("%s added with method %s", machine.getMachineName(), machineGenerator.getName()));
 				
 			}
 		}

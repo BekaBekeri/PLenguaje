@@ -1,4 +1,4 @@
-package drawing;
+package moomaui.drawing;
 
 public interface LineObject extends GraphicObject {
 	int getX1();

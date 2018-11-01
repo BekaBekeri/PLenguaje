@@ -1,4 +1,4 @@
-package drawing;
+package moomaui.drawing;
 
 public interface TextObject extends GraphicObject {
 	String getText();

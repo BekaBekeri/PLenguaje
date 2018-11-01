@@ -1,15 +1,15 @@
-package presentation;
+package moomaui.presentation;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JTextField;
 
-import domain.DrawableState;
+import moomaui.domain.DrawableState;
 
-import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 
 public class MachinePanel extends JPanel {
@@ -46,9 +46,9 @@ public class MachinePanel extends JPanel {
 		return lblMachineCanvas;
 	}
 	
-	private class CanvasMouseListener extends MouseDoubleClickListener {
+	private class CanvasMouseListener extends MouseAdapter {
 		@Override
-		public void mouseClickedNormal(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			DrawableState st = lblMachineCanvas.getStateInPosition(e.getX(), e.getY());
 			if (st != null) {
 				lblMachineCanvas.setText("Single Click  State: " + st.getName());
@@ -56,10 +56,6 @@ public class MachinePanel extends JPanel {
 			} else {
 				lblMachineCanvas.setText("Single Click  " + e.getX() + "  " + e.getY());
 			}
-		}
-		@Override
-		public void mouseDoubleClicked(MouseEvent e) {
-			lblMachineCanvas.setText("Double Click");
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -70,7 +66,12 @@ public class MachinePanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (lblMachineCanvas.getSelectedState() != null) {
-				lblMachineCanvas.getSelectedState().setCoords(e.getX(), e.getY());
+				if (e.getX() > 0 && e.getX() < MachinePanel.this.getSize().getWidth()) {
+					lblMachineCanvas.getSelectedState().setCoords(e.getX(), lblMachineCanvas.getSelectedState().getY());
+				}
+				if (e.getY() > 0 && e.getY() < MachinePanel.this.getSize().getHeight()) {
+					lblMachineCanvas.getSelectedState().setCoords(lblMachineCanvas.getSelectedState().getX(), e.getY());
+				}
 				lblMachineCanvas.repaint();
 			}
 		}

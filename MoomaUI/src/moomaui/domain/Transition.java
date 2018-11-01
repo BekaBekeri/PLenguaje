@@ -1,4 +1,4 @@
-package domain;
+package moomaui.domain;
 
 public class Transition<T extends State> {
 	protected T fromState;

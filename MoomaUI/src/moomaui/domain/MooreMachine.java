@@ -1,4 +1,4 @@
-package domain;
+package moomaui.domain;
 
 import java.util.LinkedList;
 

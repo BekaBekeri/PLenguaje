@@ -1,8 +1,8 @@
-package presentation;
+package moomaui.presentation;
 
-import domain.DrawableState;
-import domain.DrawableTransition;
-import domain.MooreMachine;
+import moomaui.domain.DrawableState;
+import moomaui.domain.DrawableTransition;
+import moomaui.domain.MooreMachine;
 
 public class Machines {
 
