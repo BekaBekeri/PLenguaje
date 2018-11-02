@@ -1,0 +1,30 @@
+Parte sintáctica
+
+PROGRAM -> L_OUTPUT L_DEFINE L_AUTOMATON
+L_OUTPUT -> OUTPUT L_OUTPUT
+L_OUTPUT -> lambda
+OUTPUT -> "ident" "asignacion" CODIGO "punto_y_coma"
+CODIGO -> "inicio_codigo" "codigo" "fin_codigo"
+L_DEFINE -> DEFINE L_DEFINE
+L_DEFINE -> lambda
+DEFINE -> "define" "ident" "llave_izquierda" ENTRADA SALIDA "llave_derecha"
+ENTRADA -> "in" "asignacion" L_EVENTO "punto_y_coma"
+SALIDA -> "out" "asignacion" L_IDENT "punto_y_coma"
+L_EVENTO -> "evento" COSA
+L_EVENTO_FACT -> "coma" L_EVENTO
+L_EVENTO_FACT -> lambda
+L_IDENT -> "ident" L_IDENT_FACT
+L_IDENT_FACT -> "coma" L_IDENT
+L_IDENT_FACT -> lambda
+L_AUTOMATON -> AUTOMATON L_AUTOMATON
+L_AUTOMATON -> lambda
+AUTOMATON -> "automaton" "ident" "par_izquierdo" "ident" "par_derecho" "llave_izquierda" STATES "punto_y_coma"
+                INITIAL "punto_y_coma" "TRANSITIONS" "llave_derecha"
+STATES -> "states" "asignacion" L_STATES
+L_STATES -> "ident" "separator" "ident" L_STATES_FACT
+L_STATES_FACT -> "coma" L_STATES
+L_STATES_FACT -> lambda
+INITIAL -> "initial" "asignacion" "ident"
+TRANSITIONS -> "transitions" "llave_izquierda" L_TRANSITIONS "llave_derecha"
+L_TRANSITIONS -> "ident" "separator" "event" "flecha" "ident" "punto_y_coma" L_TRANSITIONS
+L_TRANSITIONS -> lambda
