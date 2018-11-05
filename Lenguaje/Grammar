@@ -28,3 +28,4 @@ INITIAL -> "initial" "asignacion" "ident"
 TRANSITIONS -> "transitions" "llave_izquierda" L_TRANSITIONS "llave_derecha"
 L_TRANSITIONS -> "ident" "separator" "event" "flecha" "ident" "punto_y_coma" L_TRANSITIONS
 L_TRANSITIONS -> lambda
+COMENTARIO -> "inicio_comentario" "ascii" "fin_comentario" 
