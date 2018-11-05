@@ -162,12 +162,12 @@ Fin_codigo
 	:	':}'
 	;
 
-ascii
-  : .*?
-  ;
-
 codigo
   : Inicio_codigo ascii Fin_codigo
+  ;
+
+ascii
+  : (.|'.'|'"')*?
   ;
 
 WS : [ \r\t\n]+ -> skip ;
