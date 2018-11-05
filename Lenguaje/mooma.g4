@@ -9,7 +9,7 @@ l_output
   | ;
 
 output
-  : Ident Asignacion codigo Punto_y_coma
+  : Ident Asignacion Codigo Punto_y_coma
   ;
 
 l_define
@@ -162,12 +162,16 @@ Fin_codigo
 	:	':}'
 	;
 
-codigo
-  : Inicio_codigo ascii Fin_codigo
+Codigo
+  : Inicio_codigo Ascii Fin_codigo
   ;
 
-ascii
-  : (.|'.'|'"')*?
+Ascii
+  : (.)*?
+  ;
+
+Comentario
+  : '/*' Ascii '*/' -> skip
   ;
 
 WS : [ \r\t\n]+ -> skip ;
