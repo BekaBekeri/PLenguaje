@@ -9,7 +9,7 @@ code2 := /* HOLA \asd <> -.*/{:
 
 define alfabetos1{
     in := 1, 2;
-    out := code1, code2;
+    out := code1, code2
 }
 
 automaton cosa1 (alfabetos1){
