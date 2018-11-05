@@ -10,7 +10,7 @@ L_DEFINE -> lambda
 DEFINE -> "define" "ident" "llave_izquierda" ENTRADA SALIDA "llave_derecha"
 ENTRADA -> "in" "asignacion" L_EVENTO "punto_y_coma"
 SALIDA -> "out" "asignacion" L_IDENT "punto_y_coma"
-L_EVENTO -> "evento" COSA
+L_EVENTO -> "evento" L_EVENTO_FACT
 L_EVENTO_FACT -> "coma" L_EVENTO
 L_EVENTO_FACT -> lambda
 L_IDENT -> "ident" L_IDENT_FACT
