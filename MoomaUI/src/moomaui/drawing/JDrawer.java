@@ -27,8 +27,8 @@ public class JDrawer extends JLabel {
 	private ArrayList<GraphicObject> graphicObjectsHistory = new ArrayList<GraphicObject>();
 	private ArrayList<GraphicObject> graphicObjects = new ArrayList<GraphicObject>();
 	private int objectIndex = -1;
+	private final static int FONT_SIZE = 15;
 	public Action lastAction = Action.CREATE;
-	private static final int FONT_OFFSET = 5;
 	
 	private BufferedImage bImage = null;
 	
@@ -51,6 +51,7 @@ public class JDrawer extends JLabel {
 		return graphicObjects.get(graphicObjects.size() - 1);
 	}
 	
+	@Override
 	public void paint(Graphics g){
 		super.paint(g);
 		setAntialias(g);
@@ -90,8 +91,30 @@ public class JDrawer extends JLabel {
 		    }
 		});
 		
-		for (GraphicObject obj : sortedGraphics) {		
-			if (obj instanceof ArrowLineObject) {
+		for (GraphicObject obj : sortedGraphics) {
+			
+			// Drawing lines
+			if (obj instanceof ArcArrowLineObject) { // Draw line and arrow
+				Graphics2D g2 = (Graphics2D) g;
+				ArrowLineObject aObj = (ArrowLineObject) obj;
+				g2.setStroke(new BasicStroke(((LineObject)obj).getStroke()));
+				g2.setColor(((LineObject)obj).getColor());
+				int[] midPoint = midPoint(aObj.getX(), aObj.getX1(), aObj.getY(), aObj.getY1());
+				int radius = (int) euclideanDistance(aObj.getX(), midPoint[0], aObj.getY(), midPoint[1]);
+				int angle = (int) Math.toDegrees(angleBetweenPoints(aObj.getX(), midPoint[0], aObj.getY(), midPoint[1]));
+				/*double widthScale = Math.max(1, 2 * Math.cos(Math.toRadians(angle)));
+				double heightScale = Math.max(1, 2 * Math.sin(Math.toRadians(angle)));
+				System.out.format("Angle: %d   WidthScale: %f   HeightScale: %f\n", angle, widthScale, heightScale);*/
+				g2.drawArc(midPoint[0] - radius, midPoint[1] - radius, radius * 2, radius * 2, -angle, 180);
+
+				/*int[][] coords = generateRegularPolygon(3, aObj.getArrowSize(), aObj.getOrientation());
+				Polygon arrow = new Polygon();
+				for (int[] point : coords) {
+					arrow.addPoint(point[0] + aObj.getDeltaX1(), point[1] + aObj.getDeltaY1());
+				}
+				g2.fillPolygon(arrow);*/
+			}
+			else if (obj instanceof ArrowLineObject) { // Draw line and arrow
 				Graphics2D g2 = (Graphics2D) g;
 				ArrowLineObject aObj = (ArrowLineObject) obj;
 				g2.setStroke(new BasicStroke(((LineObject)obj).getStroke()));
@@ -103,7 +126,7 @@ public class JDrawer extends JLabel {
 				for (int[] point : coords) {
 					arrow.addPoint(point[0] + aObj.getDeltaX1(), point[1] + aObj.getDeltaY1());
 				}
-				g2.fillPolygon(arrow);;
+				g2.fillPolygon(arrow);
 			}
 			else if (obj instanceof LineObject) {
 				Graphics2D g2 = (Graphics2D) g;
@@ -111,6 +134,8 @@ public class JDrawer extends JLabel {
 				g2.setColor(((LineObject)obj).getColor());
 				g2.drawLine(obj.getX(), obj.getY(), ((LineObject) obj).getX1(), ((LineObject) obj).getY1());
 			}
+			
+			// Drawing circles
 			if (obj instanceof BevelCircleObject) {
 				BevelCircleObject bObj = (BevelCircleObject) obj;
 				int radius = bObj.getRadius();
@@ -130,17 +155,25 @@ public class JDrawer extends JLabel {
 				g.setColor(Color.GRAY);
 				g.fillOval(obj.getX() + 3, obj.getY() + 3, radius * 2 - 6, radius * 2 - 6);
 			}
+			
+			// Drawing text
 			if (obj instanceof TextObject && obj instanceof LineObject) {
 				LineObject lObj = (LineObject) obj;
 				g.setFont(new Font("Arial", Font.BOLD, 15));
 				g.setColor(((TextObject) obj).getColor());
+				int width = g.getFontMetrics().stringWidth(((TextObject) obj).getText());
+				int height = g.getFontMetrics().getHeight();
+				
 				int[] midPoint = midPoint(lObj.getX(), lObj.getX1(), lObj.getY(), lObj.getY1());
-				g.drawString(((TextObject) obj).getText(), midPoint[0], midPoint[1]);
+				g.drawString(((TextObject) obj).getText(), midPoint[0] - width / 2, midPoint[1] + height / 4);
 			}
 			else if (obj instanceof TextObject) {
-				g.setFont(new Font("Arial", Font.BOLD, 15));
+				g.setFont(new Font("Arial", Font.BOLD, FONT_SIZE));
+				int width = g.getFontMetrics().stringWidth(((TextObject) obj).getText());
+				int height = g.getFontMetrics().getHeight();
+				
 				g.setColor(((TextObject) obj).getColor());
-				g.drawString(((TextObject) obj).getText(), obj.getX() - FONT_OFFSET / 2, obj.getY() + FONT_OFFSET);
+				g.drawString(((TextObject) obj).getText(), obj.getX() - width / 2, obj.getY() + height / 4);
 			}
 		}
 	}
@@ -206,8 +239,27 @@ public class JDrawer extends JLabel {
 		return generateRegularPolygon(sides, radius, Math.PI);
 	}
 	
+	public static boolean isPointInCircle(int x, int y, int c1, int c2, int radius) {
+		return euclideanDistance(x, c1, y, c2) < radius;
+	}
+	
+	public static double euclideanDistance(int x1, int x2, int y1, int y2) {
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+	}
+	
+	public static double angleBetweenPoints(int x1, int x2, int y1, int y2) {
+		return Math.atan2(y2 - y1, x2 - x1);
+	}
+	
 	public static int[] midPoint(int x1, int x2, int y1, int y2) {
 		return new int[] {(x2 + x1) / 2, (y2 + y1) / 2};
+	}
+	
+	// p0 is the center of the arc, p1 is the source state, p2 is the destination state
+	public static int[] getArcAngles(int x0, int x1, int x2, int y0, int y1, int y2) {
+		int startAngle = (int) (180/Math.PI*Math.atan2(y1-y0, x1-x0));
+		int endAngle = (int) (180/Math.PI*Math.atan2(y2-y0, x2-x0));
+		return new int[] {startAngle, endAngle};
 	}
 }
 

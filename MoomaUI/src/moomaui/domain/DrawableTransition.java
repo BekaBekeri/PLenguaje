@@ -2,11 +2,11 @@ package moomaui.domain;
 
 import java.awt.Color;
 
-import moomaui.drawing.ArrowLineObject;
+import moomaui.drawing.ArcArrowLineObject;
 import moomaui.drawing.TextObject;
 import moomaui.presentation.MachineCanvas;
 
-public class DrawableTransition extends Transition<DrawableState> implements ArrowLineObject, TextObject {
+public class DrawableTransition extends Transition<DrawableState> implements ArcArrowLineObject, TextObject {
 	protected Color color = Color.BLACK;
 	protected int stroke = MachineCanvas.TRANSITION_STROKE;
 	protected int arrowSize = MachineCanvas.ARROW_SIZE;
@@ -36,18 +36,6 @@ public class DrawableTransition extends Transition<DrawableState> implements Arr
 	}
 
 	@Override
-	public void setX(int X) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setY(int Y) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setColor(Color color) {
 		this.color = color;
 	}
@@ -63,15 +51,23 @@ public class DrawableTransition extends Transition<DrawableState> implements Arr
 	}
 
 	@Override
-	public void setX1(int X1) {
-		// TODO Auto-generated method stub
+	public void setX(int X) {
+		this.fromState.setX(X);
+	}
 
+	@Override
+	public void setY(int Y) {
+		this.fromState.setY(Y);
+	}
+	
+	@Override
+	public void setX1(int X1) {
+		this.toState.setX(X1);
 	}
 
 	@Override
 	public void setY1(int Y1) {
-		// TODO Auto-generated method stub
-
+		this.toState.setY(Y1);
 	}
 
 	@Override
@@ -118,8 +114,7 @@ public class DrawableTransition extends Transition<DrawableState> implements Arr
 
 	@Override
 	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
+		this.input = text;
 	}
 
 }
