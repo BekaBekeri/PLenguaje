@@ -1,16 +1,11 @@
 package moomaui.presentation;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
-
-import javax.swing.JToolBar;
-
-import javax.swing.JButton;
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -19,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 public class MainWindow {
@@ -28,24 +24,26 @@ public class MainWindow {
 	private JTabbedPane pnlMachines;
 	private final static Logger ROOT_LOGGER = Logger.getLogger("moomaui");
 	private final static Logger LOGGER = Logger.getLogger("moomaui.presentation.MainWindow");
+	private static Thread UIThread;
 
 	/**
 	 * Launch the application.
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+	public static void main(String[] args) throws IOException {
+		setUpLoggers();
+		UIThread = new Thread() {
 			public void run() {
 				try {
-					setUpLoggers();
 					MainWindow window = new MainWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		});
+		};
+		EventQueue.invokeLater(UIThread);
 	}
-	
 	private static void setUpLoggers() throws SecurityException, IOException {
 		Handler consoleHandler = new ConsoleHandler();
 		Handler fileHandler = new FileHandler("./mooma.log", false);
@@ -57,6 +55,7 @@ public class MainWindow {
 
 		consoleHandler.setLevel(Level.ALL);
 		fileHandler.setLevel(Level.ALL);
+		ROOT_LOGGER.setUseParentHandlers(false);
 		
 		LOGGER.log(Level.INFO, "Mooma loggers initialized");
 	}
@@ -66,6 +65,11 @@ public class MainWindow {
 	public MainWindow() {
 		initialize();
 		initializeMachines();
+		
+		if (machinePanels.size() == 0) {
+			ROOT_LOGGER.log(Level.SEVERE, "No machines could be added, exiting.");
+			System.exit(1);
+		}
 		
 		frame.setTitle("Mooma UI");
 	}
@@ -89,19 +93,23 @@ public class MainWindow {
 			MachineCanvas machine = null;
 			try {
 				// Check if method returns a MachineCanvas
-				if (machineGenerator.getReturnType() == MachineCanvas.class)
+				if (!Modifier.isStatic(machineGenerator.getModifiers())) {
+					ROOT_LOGGER.log(Level.WARNING, String.format("Method %s is not static and its machine will not be added.", machineGenerator.getName()));
+					continue;
+				}
+				else if (machineGenerator.getReturnType() == MachineCanvas.class)
 					machine = (MachineCanvas) machineGenerator.invoke(null);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+				else
+					continue;
+			} catch (NullPointerException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				ROOT_LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				continue;
 			}
-			
-			if (machine instanceof MachineCanvas) {
-				MachinePanel pnl = new MachinePanel(machine);
-				machinePanels.add(pnl);
-				pnlMachines.addTab(machine.getMachineName(), pnl);
-				LOGGER.log(Level.INFO, String.format("%s added with method %s", machine.getMachineName(), machineGenerator.getName()));
-				
-			}
+
+			MachinePanel pnl = new MachinePanel(machine);
+			machinePanels.add(pnl);
+			pnlMachines.addTab(machine.getMachineName(), pnl);
+			LOGGER.log(Level.INFO, String.format("%s added with method %s", machine.getMachineName(), machineGenerator.getName()));
 		}
 	}
 }
