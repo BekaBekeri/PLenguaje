@@ -1,5 +1,7 @@
 package moomaui.presentation;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.LinkedList;
 
 import moomaui.domain.DrawableState;
@@ -17,6 +19,7 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 	public static final int STATE_OFFSET = 6;
 	public static final int TRANSITION_STROKE = 2;
 	public static final int ARROW_SIZE = 7;
+	public static final int MACHINE_DEFAULT_RADIUS = 130;
 
 	public MachineCanvas() {
 		mMachine = new MooreMachine<DrawableState, DrawableTransition>();
@@ -31,6 +34,23 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 		for (DrawableTransition transition : mMachine.getTransitions()) {
 			this.addGraphicObject(transition);
 		}
+	}
+	
+	@Override
+	public void paint(Graphics g){
+		// If the states positions are not initialized then initialize them
+		if (mMachine.getStates().stream().allMatch(p -> p.getX() < -1 && p.getY() < -1)) {
+			int[][] coords = MachineCanvas.generateRegularPolygon(mMachine.getStates().size(), MACHINE_DEFAULT_RADIUS);
+			Dimension size = this.getSize();
+			int xOffset = size.width / 2;
+			int yOffset = size.height / 2;
+			for (int i = 0; i < mMachine.getStates().size(); i++) {
+				DrawableState st = mMachine.getStates().get(i);
+				st.setX(coords[i][0] + xOffset);
+				st.setY(coords[i][1] + yOffset);
+			}
+		}
+		super.paint(g);	
 	}
 	
 	@Override
