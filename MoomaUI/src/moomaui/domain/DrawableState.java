@@ -14,16 +14,14 @@ public class DrawableState extends State implements BevelCircleObject, TextObjec
 	private int radius = MachineCanvas.STATE_RADIUS;
 	private int offset = MachineCanvas.STATE_OFFSET;
 	
-	public DrawableState(int ID) {
-		super(ID);
-	}
-	
-	public DrawableState(int ID, String name) {
-		super(ID, name);
+	public DrawableState(String name) {
+		super(name);
+		this.x = -10;
+		this.y = -10;
 	}
 	
 	public DrawableState(State st) {
-		this(st.getID(), st.getName());
+		this(st.getName());
 	}
 	
 	public int getX() {
