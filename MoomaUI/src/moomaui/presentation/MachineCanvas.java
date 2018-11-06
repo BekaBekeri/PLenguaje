@@ -20,6 +20,7 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 	public static final int TRANSITION_STROKE = 2;
 	public static final int ARROW_SIZE = 7;
 	public static final int MACHINE_DEFAULT_RADIUS = 130;
+	public static final int ARC_LINE_CONTROL_POINT_OFFSET = 70;
 
 	public MachineCanvas() {
 		mMachine = new MooreMachine<DrawableState, DrawableTransition>();
@@ -93,6 +94,11 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 	@Override
 	public LinkedList<DrawableState> getStates() {
 		return mMachine.getStates();
+	}
+
+	@Override
+	public LinkedList<DrawableState> getDestinationStates(DrawableState originState, String input) {
+		return mMachine.getDestinationStates(originState, input);
 	}
 
 	@Override

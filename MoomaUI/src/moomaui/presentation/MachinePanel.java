@@ -7,8 +7,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import moomaui.domain.DrawableState;
+import moomaui.domain.DrawableTransition;
+import moomaui.domain.MachineSimulator;
 
 import javax.swing.JLabel;
 
@@ -17,6 +21,7 @@ public class MachinePanel extends JPanel {
 	
 	private JTextField txtInput;
 	private MachineCanvas lblMachineCanvas;
+	private MachineSimulator<DrawableState, DrawableTransition> simulator;
 	private JLabel lblOla;
 
 	/**
@@ -28,18 +33,23 @@ public class MachinePanel extends JPanel {
 		txtInput = new JTextField();
 		add(txtInput, BorderLayout.SOUTH);
 		txtInput.setColumns(10);
+		txtInput.getDocument().addDocumentListener(new TextChangeListener());
 		
-		lblOla = new JLabel("ola");
+		lblOla = new JLabel("");
 		add(lblOla, BorderLayout.CENTER);
 		lblMachineCanvas = new MachineCanvas();
+		
+		simulator = new MachineSimulator<DrawableState, DrawableTransition>(lblMachineCanvas);
 	}
 	
 	public MachinePanel(MachineCanvas canvas) {
 		this();
 		this.lblMachineCanvas = canvas;
+		this.simulator.setMachine(canvas);
 		add(lblMachineCanvas, BorderLayout.CENTER);
 		lblMachineCanvas.addMouseMotionListener(new CanvasMouseMotionListener());
 		lblMachineCanvas.addMouseListener(new CanvasMouseListener());
+		simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
 	}
 	
 	public MachineCanvas getMachineCanvas() {
@@ -78,6 +88,34 @@ public class MachinePanel extends JPanel {
 				lblMachineCanvas.repaint();
 			}
 		}
+	}
+	private class TextChangeListener implements DocumentListener {
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			System.out.println("Insertion, index: " + e.getOffset());
+			changed();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			System.out.println("Removal, index: " + e.getOffset());
+			changed();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			System.out.println("Changed, index: " + e.getOffset());
+			changed();
+		}
+		
+		public void changed() {
+			String[] inputs = txtInput.getText().split(" ");
+			for (String input : inputs) {
+				simulator.addNewInput(input);
+			}
+		}
+		
 	}
 
 }

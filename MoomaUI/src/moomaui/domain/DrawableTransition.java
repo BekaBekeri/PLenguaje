@@ -3,10 +3,11 @@ package moomaui.domain;
 import java.awt.Color;
 
 import moomaui.drawing.ArcArrowLineObject;
+import moomaui.drawing.ArrowLineObject;
 import moomaui.drawing.TextObject;
 import moomaui.presentation.MachineCanvas;
 
-public class DrawableTransition extends Transition<DrawableState> implements ArcArrowLineObject, TextObject {
+public class DrawableTransition extends Transition<DrawableState> implements ArrowLineObject, TextObject {
 	protected Color color = Color.BLACK;
 	protected int stroke = MachineCanvas.TRANSITION_STROKE;
 	protected int arrowSize = MachineCanvas.ARROW_SIZE;
@@ -109,12 +110,12 @@ public class DrawableTransition extends Transition<DrawableState> implements Arc
 
 	@Override
 	public String getText() {
-		return this.input;
+		return this.getInput();
 	}
 
 	@Override
 	public void setText(String text) {
-		this.input = text;
+		this.setInput(text);
 	}
 
 }

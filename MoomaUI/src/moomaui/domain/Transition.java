@@ -8,13 +8,13 @@ public class Transition<T extends State> {
 	public Transition(T fromState, T toState) {
 		this.setFromState(fromState);
 		this.setToState(toState);
-		this.input = "";
+		this.setInput("");
 	}
 	
 	public Transition(T fromState, T toState, String input) {
 		this.setFromState(fromState);
 		this.setToState(toState);
-		this.input = input;
+		this.setInput(input);
 	}
 
 	public T getFromState() {
@@ -32,13 +32,21 @@ public class Transition<T extends State> {
 	public void setToState(T toState) {
 		this.toState = toState;
 	}
+
+	public String getInput() {
+		return input;
+	}
+
+	public void setInput(String input) {
+		this.input = input;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Transition) {
 			@SuppressWarnings("unchecked")
 			Transition<T> t = (Transition<T>) obj;
-			return this.getFromState().equals(t.getFromState()) && this.getToState().equals(t.getToState()) && this.input.equals(t.input);
+			return this.getFromState().equals(t.getFromState()) && this.getToState().equals(t.getToState()) && this.getInput().equals(t.getInput());
 		}
 		return false;
 	}

@@ -47,6 +47,16 @@ public class MooreMachine<S extends State,T extends Transition<S>> implements IM
 	public LinkedList<S> getStates() {
 		return this.states;
 	}
+
+	@Override
+	public LinkedList<S> getDestinationStates(S originState, String input) {
+		LinkedList<S> destinationStates = new LinkedList<>();
+		for (Transition<S> t : transitions) {
+			if (t.getFromState().equals(originState) && t.getInput().equals(input))
+				destinationStates.add(t.getToState());
+		}
+		return destinationStates;
+	}
 	
 	@Override
 	public LinkedList<T> getTransitions() {
