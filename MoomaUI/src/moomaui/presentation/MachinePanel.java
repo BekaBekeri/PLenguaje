@@ -93,26 +93,33 @@ public class MachinePanel extends JPanel {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			System.out.println("Insertion, index: " + e.getOffset());
+			//System.out.println("Insertion, index: " + e.getOffset());
 			changed();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			System.out.println("Removal, index: " + e.getOffset());
+			//System.out.println("Removal, index: " + e.getOffset());
 			changed();
 		}
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			System.out.println("Changed, index: " + e.getOffset());
+			//System.out.println("Changed, index: " + e.getOffset());
 			changed();
 		}
 		
 		public void changed() {
-			String[] inputs = txtInput.getText().split(" ");
-			for (String input : inputs) {
-				simulator.addNewInput(input);
+			if (txtInput.getText().equals(""))
+				simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
+			else if (txtInput.getText().endsWith(" ")) {
+				String[] inputs = txtInput.getText().split(" ");
+				for (String input : inputs) {
+					if (!simulator.addNewInput(input)) {
+						System.out.format("No available transition from %s with input %s, aborting\n", simulator.getCurrentState().getName(), input);
+						break;
+					}
+				}
 			}
 		}
 		
