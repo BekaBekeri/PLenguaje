@@ -1,4 +1,4 @@
-package moomaui.drawing;
+package moomaui.presentation.drawing;
 
 import java.awt.Color;
 

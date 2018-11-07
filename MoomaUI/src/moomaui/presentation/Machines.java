@@ -35,10 +35,12 @@ public class Machines {
 		DrawableState st2 = new DrawableState("2"); st1.setAction(() -> System.out.println("Segundo Estado"));
 
 		DrawableTransition t1 = new DrawableTransition(st1, st2, "2");
+		DrawableTransition t2 = new DrawableTransition(st2, st1, "1");
 		
 		machine.addState(st1);
 		machine.addState(st2);
 		machine.addTransition(t1);
+		machine.addTransition(t2);
 
 		MachineCanvas canvas = new MachineCanvas(machine);
 		canvas.setMachineName("Maquina2");

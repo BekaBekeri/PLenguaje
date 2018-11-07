@@ -1,4 +1,4 @@
-package moomaui.drawing;
+package moomaui.presentation.drawing;
 
 public interface ArrowLineObject extends LineObject, ArrowObject {
 	int getDeltaX1();

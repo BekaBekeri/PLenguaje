@@ -1,4 +1,4 @@
-package moomaui.drawing;
+package moomaui.presentation.drawing;
 
 
 import java.awt.BasicStroke;
@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,8 @@ import java.util.Comparator;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
+
+import moomaui.presentation.MachineCanvas;
 
 public class JDrawer extends JLabel {
 	/**
@@ -101,11 +104,18 @@ public class JDrawer extends JLabel {
 				g2.setColor(((LineObject)obj).getColor());
 				int[] midPoint = midPoint(aObj.getX(), aObj.getX1(), aObj.getY(), aObj.getY1());
 				int radius = (int) euclideanDistance(aObj.getX(), midPoint[0], aObj.getY(), midPoint[1]);
-				int angle = (int) Math.toDegrees(angleBetweenPoints(aObj.getX(), midPoint[0], aObj.getY(), midPoint[1]));
+				double angle = angleBetweenPoints(aObj.getX(), midPoint[0], aObj.getY(), midPoint[1]);
 				/*double widthScale = Math.max(1, 2 * Math.cos(Math.toRadians(angle)));
 				double heightScale = Math.max(1, 2 * Math.sin(Math.toRadians(angle)));
 				System.out.format("Angle: %d   WidthScale: %f   HeightScale: %f\n", angle, widthScale, heightScale);*/
-				g2.drawArc(midPoint[0] - radius, midPoint[1] - radius, radius * 2, radius * 2, -angle, 180);
+				GeneralPath path = new GeneralPath();
+				path.moveTo(aObj.getX(), aObj.getY());
+				int xControlPointOffset = (int) (Math.sin(angle) * MachineCanvas.ARC_LINE_CONTROL_POINT_OFFSET);
+				int yControlPointOffset = (int) (Math.cos(angle) * MachineCanvas.ARC_LINE_CONTROL_POINT_OFFSET);
+				System.out.println(xControlPointOffset + "   " + yControlPointOffset);
+				path.quadTo(midPoint[0] - xControlPointOffset, midPoint[1] - yControlPointOffset, aObj.getX1(), aObj.getY1());
+				g2.draw(path);
+				//g2.drawArc(midPoint[0] - radius, midPoint[1] - radius, radius * 2, radius * 2, -angle, 180);
 
 				/*int[][] coords = generateRegularPolygon(3, aObj.getArrowSize(), aObj.getOrientation());
 				Polygon arrow = new Polygon();

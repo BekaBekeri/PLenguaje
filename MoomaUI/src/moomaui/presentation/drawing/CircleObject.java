@@ -1,4 +1,4 @@
-package moomaui.drawing;
+package moomaui.presentation.drawing;
 
 public interface CircleObject extends GraphicObject {
 	int getRadius();

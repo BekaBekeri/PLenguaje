@@ -2,10 +2,10 @@ package moomaui.domain;
 
 import java.awt.Color;
 
-import moomaui.drawing.ArcArrowLineObject;
-import moomaui.drawing.ArrowLineObject;
-import moomaui.drawing.TextObject;
 import moomaui.presentation.MachineCanvas;
+import moomaui.presentation.drawing.ArcArrowLineObject;
+import moomaui.presentation.drawing.ArrowLineObject;
+import moomaui.presentation.drawing.TextObject;
 
 public class DrawableTransition extends Transition<DrawableState> implements ArrowLineObject, TextObject {
 	protected Color color = Color.BLACK;

@@ -15,6 +15,14 @@ import moomaui.domain.DrawableTransition;
 import moomaui.domain.MachineSimulator;
 
 import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.Dimension;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.DebugGraphics;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class MachinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -23,6 +31,17 @@ public class MachinePanel extends JPanel {
 	private MachineCanvas lblMachineCanvas;
 	private MachineSimulator<DrawableState, DrawableTransition> simulator;
 	private JLabel lblOla;
+	private JPanel pnlMachine;
+	private JPanel pnlOutput;
+	//private JTextArea txtOutput;
+	private JBottomToTopTextAreaPanel pnlBottomOutput;
+	private JSeparator separator;
+	private JPanel pnlSpacers;
+	private Component horizontalStrut;
+	private JPanel pnlTextOutput;
+	private JLabel lblMachineOutput;
+	private Component verticalStrut;
+	private Component horizontalStrut_1;
 
 	/**
 	 * Create the panel.
@@ -30,14 +49,59 @@ public class MachinePanel extends JPanel {
 	private MachinePanel() {
 		setLayout(new BorderLayout(0, 0));
 		
+		pnlMachine = new JPanel();
+		add(pnlMachine, BorderLayout.CENTER);
+		pnlMachine.setLayout(new BorderLayout(0, 0));
+		
+		lblOla = new JLabel("");
+		pnlMachine.add(lblOla);
+		
 		txtInput = new JTextField();
-		add(txtInput, BorderLayout.SOUTH);
+		pnlMachine.add(txtInput, BorderLayout.SOUTH);
 		txtInput.setColumns(10);
 		txtInput.getDocument().addDocumentListener(new TextChangeListener());
 		
-		lblOla = new JLabel("");
-		add(lblOla, BorderLayout.CENTER);
+		pnlOutput = new JPanel();
+		add(pnlOutput, BorderLayout.EAST);
+		pnlOutput.setLayout(new BorderLayout(0, 0));
+		
+		pnlSpacers = new JPanel();
+		pnlSpacers.setPreferredSize(new Dimension(5, 5));
+		pnlOutput.add(pnlSpacers, BorderLayout.WEST);
+		pnlSpacers.setLayout(new BorderLayout(0, 0));
+		
+		separator = new JSeparator();
+		pnlSpacers.add(separator, BorderLayout.WEST);
+		separator.setSize(new Dimension(3, 3));
+		separator.setMinimumSize(new Dimension(3, 3));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		
+		horizontalStrut = Box.createHorizontalStrut(20);
+		horizontalStrut.setPreferredSize(new Dimension(10, 0));
+		horizontalStrut.setMinimumSize(new Dimension(10, 0));
+		pnlSpacers.add(horizontalStrut, BorderLayout.NORTH);
+		
+		pnlTextOutput = new JPanel();
+		pnlOutput.add(pnlTextOutput, BorderLayout.CENTER);
+		pnlTextOutput.setLayout(new BorderLayout(0, 0));
+		
+		pnlBottomOutput = new JBottomToTopTextAreaPanel();
+		
+		lblMachineOutput = new JLabel("Machine Output");
+		lblMachineOutput.setHorizontalAlignment(SwingConstants.CENTER);
+		pnlTextOutput.add(lblMachineOutput, BorderLayout.NORTH);
+		pnlTextOutput.add(pnlBottomOutput, BorderLayout.CENTER);
+		
+		verticalStrut = Box.createVerticalStrut(20);
+		verticalStrut.setPreferredSize(new Dimension(0, 4));
+		pnlTextOutput.add(verticalStrut, BorderLayout.SOUTH);
+		
+		horizontalStrut_1 = Box.createHorizontalStrut(20);
+		horizontalStrut_1.setPreferredSize(new Dimension(4, 0));
+		pnlTextOutput.add(horizontalStrut_1, BorderLayout.EAST);
 		lblMachineCanvas = new MachineCanvas();
+		
+		System.setOut(pnlBottomOutput.getTxtStream());
 		
 		simulator = new MachineSimulator<DrawableState, DrawableTransition>(lblMachineCanvas);
 	}

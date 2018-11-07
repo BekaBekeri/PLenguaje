@@ -2,9 +2,9 @@ package moomaui.domain;
 
 import java.awt.Color;
 
-import moomaui.drawing.BevelCircleObject;
-import moomaui.drawing.TextObject;
 import moomaui.presentation.MachineCanvas;
+import moomaui.presentation.drawing.BevelCircleObject;
+import moomaui.presentation.drawing.TextObject;
 
 public class DrawableState extends State implements BevelCircleObject, TextObject {
 	private int x;

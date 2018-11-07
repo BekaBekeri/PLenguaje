@@ -16,6 +16,7 @@ import java.util.logging.SimpleFormatter;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 public class MainWindow {
 
@@ -24,15 +25,16 @@ public class MainWindow {
 	private JTabbedPane pnlMachines;
 	private final static Logger ROOT_LOGGER = Logger.getLogger("moomaui");
 	private final static Logger LOGGER = Logger.getLogger("moomaui.presentation.MainWindow");
-	private static Thread UIThread;
 
 	/**
 	 * Launch the application.
 	 * @throws IOException 
+	 * @wbp.parser.entryPoint
 	 */
 	public static void main(String[] args) throws IOException {
 		setUpLoggers();
-		UIThread = new Thread() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					MainWindow window = new MainWindow();
@@ -41,8 +43,7 @@ public class MainWindow {
 					e.printStackTrace();
 				}
 			}
-		};
-		EventQueue.invokeLater(UIThread);
+		});
 	}
 	private static void setUpLoggers() throws SecurityException, IOException {
 		Handler consoleHandler = new ConsoleHandler();
@@ -61,25 +62,27 @@ public class MainWindow {
 	}
 	/**
 	 * Create the application.
+	 * @wbp.parser.entryPoint
 	 */
 	public MainWindow() {
 		initialize();
 		initializeMachines();
 		
-		if (machinePanels.size() == 0) {
+		/*if (machinePanels.size() == 0) {
 			ROOT_LOGGER.log(Level.SEVERE, "No machines could be added, exiting.");
 			System.exit(1);
-		}
+		}*/
 		
 		frame.setTitle("Mooma UI");
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @wbp.parser.entryPoint
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 706, 660);
+		frame.setBounds(100, 100, 820, 531);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		

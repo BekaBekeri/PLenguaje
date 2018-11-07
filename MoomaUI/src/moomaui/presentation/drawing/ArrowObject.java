@@ -1,4 +1,4 @@
-package moomaui.drawing;
+package moomaui.presentation.drawing;
 
 public interface ArrowObject extends GraphicObject {
 	int getArrowSize();
