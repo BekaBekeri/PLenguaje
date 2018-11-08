@@ -1,13 +1,11 @@
-package moomaui.domain;
+package moomaui.presentation.drawing;
 
 import java.awt.Color;
 
+import moomaui.domain.Transition;
 import moomaui.presentation.MachineCanvas;
-import moomaui.presentation.drawing.ArcArrowLineObject;
-import moomaui.presentation.drawing.ArrowLineObject;
-import moomaui.presentation.drawing.TextObject;
 
-public class DrawableTransition extends Transition<DrawableState> implements ArrowLineObject, TextObject {
+public class DrawableTransition extends Transition<DrawableState> implements ArcArrowLineObject, TextObject {
 	protected Color color = Color.BLACK;
 	protected int stroke = MachineCanvas.TRANSITION_STROKE;
 	protected int arrowSize = MachineCanvas.ARROW_SIZE;

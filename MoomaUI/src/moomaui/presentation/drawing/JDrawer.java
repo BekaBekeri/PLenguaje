@@ -105,24 +105,15 @@ public class JDrawer extends JLabel {
 				int[] midPoint = midPoint(aObj.getX(), aObj.getX1(), aObj.getY(), aObj.getY1());
 				int radius = (int) euclideanDistance(aObj.getX(), midPoint[0], aObj.getY(), midPoint[1]);
 				double angle = angleBetweenPoints(aObj.getX(), midPoint[0], aObj.getY(), midPoint[1]);
-				/*double widthScale = Math.max(1, 2 * Math.cos(Math.toRadians(angle)));
-				double heightScale = Math.max(1, 2 * Math.sin(Math.toRadians(angle)));
-				System.out.format("Angle: %d   WidthScale: %f   HeightScale: %f\n", angle, widthScale, heightScale);*/
+
 				GeneralPath path = new GeneralPath();
 				path.moveTo(aObj.getX(), aObj.getY());
-				int xControlPointOffset = (int) (Math.sin(angle) * MachineCanvas.ARC_LINE_CONTROL_POINT_OFFSET);
-				int yControlPointOffset = (int) (Math.cos(angle) * MachineCanvas.ARC_LINE_CONTROL_POINT_OFFSET);
-				System.out.println(xControlPointOffset + "   " + yControlPointOffset);
+				int xControlPointOffset = (int) (Math.cos(Math.toRadians(Math.toDegrees(angle) + 90)) * MachineCanvas.ARC_LINE_CONTROL_POINT_OFFSET);
+				int yControlPointOffset = (int) (Math.sin(Math.toRadians(Math.toDegrees(angle) + 90)) * MachineCanvas.ARC_LINE_CONTROL_POINT_OFFSET);
+				System.out.println(Math.toDegrees(angle) + "    " + xControlPointOffset + "   " + yControlPointOffset);
 				path.quadTo(midPoint[0] - xControlPointOffset, midPoint[1] - yControlPointOffset, aObj.getX1(), aObj.getY1());
 				g2.draw(path);
-				//g2.drawArc(midPoint[0] - radius, midPoint[1] - radius, radius * 2, radius * 2, -angle, 180);
-
-				/*int[][] coords = generateRegularPolygon(3, aObj.getArrowSize(), aObj.getOrientation());
-				Polygon arrow = new Polygon();
-				for (int[] point : coords) {
-					arrow.addPoint(point[0] + aObj.getDeltaX1(), point[1] + aObj.getDeltaY1());
-				}
-				g2.fillPolygon(arrow);*/
+				g.drawRect(midPoint[0] - xControlPointOffset, midPoint[1] - yControlPointOffset, 5, 5);
 			}
 			else if (obj instanceof ArrowLineObject) { // Draw line and arrow
 				Graphics2D g2 = (Graphics2D) g;

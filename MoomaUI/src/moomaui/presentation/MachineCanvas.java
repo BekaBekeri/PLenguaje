@@ -4,10 +4,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import moomaui.domain.DrawableState;
-import moomaui.domain.DrawableTransition;
 import moomaui.domain.IMooreMachine;
 import moomaui.domain.MooreMachine;
+import moomaui.presentation.drawing.DrawableState;
+import moomaui.presentation.drawing.DrawableTransition;
 import moomaui.presentation.drawing.JDrawer;
 
 public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableState, DrawableTransition> {

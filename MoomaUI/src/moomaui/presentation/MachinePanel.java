@@ -10,9 +10,9 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import moomaui.domain.DrawableState;
-import moomaui.domain.DrawableTransition;
 import moomaui.domain.MachineSimulator;
+import moomaui.presentation.drawing.DrawableState;
+import moomaui.presentation.drawing.DrawableTransition;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -30,10 +30,7 @@ public class MachinePanel extends JPanel {
 	private JTextField txtInput;
 	private MachineCanvas lblMachineCanvas;
 	private MachineSimulator<DrawableState, DrawableTransition> simulator;
-	private JLabel lblOla;
-	private JPanel pnlMachine;
 	private JPanel pnlOutput;
-	//private JTextArea txtOutput;
 	private JBottomToTopTextAreaPanel pnlBottomOutput;
 	private JSeparator separator;
 	private JPanel pnlSpacers;
@@ -42,6 +39,7 @@ public class MachinePanel extends JPanel {
 	private JLabel lblMachineOutput;
 	private Component verticalStrut;
 	private Component horizontalStrut_1;
+	private JPanel pnlMachine;
 
 	/**
 	 * Create the panel.
@@ -52,9 +50,6 @@ public class MachinePanel extends JPanel {
 		pnlMachine = new JPanel();
 		add(pnlMachine, BorderLayout.CENTER);
 		pnlMachine.setLayout(new BorderLayout(0, 0));
-		
-		lblOla = new JLabel("");
-		pnlMachine.add(lblOla);
 		
 		txtInput = new JTextField();
 		pnlMachine.add(txtInput, BorderLayout.SOUTH);
@@ -101,8 +96,6 @@ public class MachinePanel extends JPanel {
 		pnlTextOutput.add(horizontalStrut_1, BorderLayout.EAST);
 		lblMachineCanvas = new MachineCanvas();
 		
-		System.setOut(pnlBottomOutput.getTxtStream());
-		
 		simulator = new MachineSimulator<DrawableState, DrawableTransition>(lblMachineCanvas);
 	}
 	
@@ -110,7 +103,7 @@ public class MachinePanel extends JPanel {
 		this();
 		this.lblMachineCanvas = canvas;
 		this.simulator.setMachine(canvas);
-		add(lblMachineCanvas, BorderLayout.CENTER);
+		pnlMachine.add(lblMachineCanvas, BorderLayout.CENTER);
 		lblMachineCanvas.addMouseMotionListener(new CanvasMouseMotionListener());
 		lblMachineCanvas.addMouseListener(new CanvasMouseListener());
 		simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
@@ -143,10 +136,10 @@ public class MachinePanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (lblMachineCanvas.getSelectedState() != null) {
-				if (e.getX() > 0 && e.getX() < MachinePanel.this.getSize().getWidth()) {
+				if (e.getX() > 0 && e.getX() < MachinePanel.this.pnlMachine.getSize().getWidth()) {
 					lblMachineCanvas.getSelectedState().setCoords(e.getX(), lblMachineCanvas.getSelectedState().getY());
 				}
-				if (e.getY() > 0 && e.getY() < MachinePanel.this.getSize().getHeight()) {
+				if (e.getY() > 0 && e.getY() < MachinePanel.this.pnlMachine.getSize().getHeight()) {
 					lblMachineCanvas.getSelectedState().setCoords(lblMachineCanvas.getSelectedState().getX(), e.getY());
 				}
 				lblMachineCanvas.repaint();
