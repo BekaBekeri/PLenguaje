@@ -115,11 +115,6 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 	public void setMachineName(String name) {
 		mMachine.setMachineName(name);
 	}
-
-	@Override
-	public int getNextID() {
-		return mMachine.getNextID();
-	}
 	
 	public DrawableState getStateInPosition(int x, int y) {
 		DrawableState state = null;

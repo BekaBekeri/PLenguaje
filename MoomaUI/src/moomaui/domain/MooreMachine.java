@@ -6,7 +6,6 @@ public class MooreMachine<S extends State,T extends Transition<S>> implements IM
 	protected LinkedList<S> states;
 	protected LinkedList<T> transitions;
 	protected String name = "Machine";
-	private int nextID = 1;
 	
 	public MooreMachine() {
 		states = new LinkedList<S>();
@@ -61,11 +60,6 @@ public class MooreMachine<S extends State,T extends Transition<S>> implements IM
 	@Override
 	public LinkedList<T> getTransitions() {
 		return this.transitions;
-	}
-	
-	@Override
-	public int getNextID() {
-		return nextID++;
 	}
 	
 	@Override

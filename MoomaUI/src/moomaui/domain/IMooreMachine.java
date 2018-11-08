@@ -12,5 +12,4 @@ public interface IMooreMachine<S, T> {
 	LinkedList<T> getTransitions();
 	String getMachineName();
 	void setMachineName(String name);
-	int getNextID();
 }
