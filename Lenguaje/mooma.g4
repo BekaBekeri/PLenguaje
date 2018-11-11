@@ -1,5 +1,177 @@
 grammar mooma;
 
+/*
+ * Lexer Rules
+ */
+ 
+/*
+ * Fragments
+ */  
+ 
+
+fragment Letra
+  : ('a' .. 'z') | ('A' .. 'Z')
+  ;
+
+fragment Digito
+  : ('0' .. '9')
+  ;
+
+fragment A
+  : 'A' | 'a'
+  ;
+  
+fragment U
+  : 'U' | 'u'
+  ;
+ 
+fragment T
+  : 'T' | 't'
+  ;
+ 
+fragment O
+  : 'O' | 'o'
+  ; 
+  
+fragment M
+  : 'M' | 'm'
+  ;
+  
+fragment N
+  : 'N' | 'n'
+  ;
+  
+fragment I
+  : 'I' | 'i'
+  ;
+  
+fragment R
+  : 'R' | 'r'
+  ;
+  
+fragment S
+  : 'S' | 's'
+  ;
+  
+fragment L
+  : 'L' | 'l'
+  ;
+  
+fragment E
+  : 'E' | 'e'
+  ;
+  
+fragment D
+  : 'D' | 'd'
+  ;
+  
+fragment F
+  : 'F' | 'f'
+  ;
+ 
+/*
+ * Symbols
+ */
+
+Flecha
+  : '->'
+  ;
+
+Separator
+  : '|'
+  ;
+
+Par_derecho
+  : ')'
+  ;
+  
+Par_izquierdo
+  : '('
+  ;
+  
+Llave_izquierda
+  : '{'
+  ;
+
+Llave_derecha
+  : '}'
+  ;
+
+Punto_y_coma
+  :	';'
+  ;
+
+Asignacion
+  :	':='
+  ;
+
+Coma
+  : ','
+  ;
+  
+/*
+ * Keywords
+ */
+ 
+Auto
+  : A U T O M A T O N
+  ;
+  
+In
+  : I N
+  ;
+
+Out
+  : O U T
+  ;
+  
+Trans
+  : T R A N S I T I O N S
+  ;
+
+Ini
+  : I N I T I A L
+  ;
+  
+Sta
+  : S T A T E S
+  ;
+
+Def
+  : D E F I N E
+  ;
+  
+/*
+ * Generic tokens
+ */
+Ident
+  : Letra (Letra | Digito)*
+  ;
+
+Evento
+  : ('1' .. '9') Digito*
+  ;
+
+Codigo
+  : '{:' (.)*? ':}'
+  ;
+
+Comentario
+  : '/*' (.)*? '*/' -> skip
+  ;
+
+/*
+ * Spaces and tabs.
+ * (Skipped; only maintained inside token Codigo)
+ */ 
+  
+WS : [ \r\t\n]+ -> skip ;
+
+
+/*
+ * Parser rules
+ */
+
 program
   : l_output l_define l_automaton
   ;
@@ -19,9 +191,7 @@ l_define
 define
   : Def Ident Llave_izquierda entrada salida Llave_derecha
   ;
-Def
-  : 'define'
-  ;
+
 
 entrada
   : In Asignacion l_evento Punto_y_coma
@@ -31,18 +201,6 @@ salida
   : Out Asignacion l_ident Punto_y_coma
   ;
 
-In
-  : 'in'
-  ;
-
-Out
-  : 'out'
-  ;
-
-l_automaton
-  : automaton l_automaton
-  | ;
-
 l_evento
   : Evento l_evento_fact
   ;
@@ -51,10 +209,6 @@ l_evento_fact
   : Coma l_evento
   | ;
 
-automaton
-  : Auto Ident Par_izquierdo Ident Par_derecho Llave_izquierda states Punto_y_coma initial Punto_y_coma transitions Llave_derecha
-  ;
-
 l_ident
   : Ident l_ident_fact
   ;
@@ -62,22 +216,15 @@ l_ident
 l_ident_fact
   : Coma l_ident
   | ;
+  
+l_automaton
+  : automaton l_automaton
+  | ;
 
-Auto
-  : 'automaton'
+automaton
+  : Auto Ident Par_izquierdo Ident Par_derecho Llave_izquierda states Punto_y_coma initial Punto_y_coma transitions Llave_derecha
   ;
-
-Trans
-  : 'transitions'
-  ;
-
-Ini
-  : 'initial'
-  ;
-Sta
-  :'states'
-  ;
-
+  
 states
   : Sta Asignacion l_states
   ;
@@ -100,78 +247,5 @@ transitions
 
 l_transitions
   : Ident Separator l_evento Flecha Ident Punto_y_coma l_transitions
-  | ;
-
-Ident
-  : Letra (Letra | Digito)*
-  ;
-
-Flecha
-  : '->'
-  ;
-
-Separator
-  : '|'
-  ;
-
-Par_derecho
-  : ')'
-  ;
-
-Par_izquierdo
-  : '('
-  ;
-
-Coma
-  : ','
-  ;
-
-Evento
-  : ('1' .. '9') Digito*
-  ;
-
-Llave_izquierda
-  : '{'
-  ;
-
-Llave_derecha
-  : '}'
-  ;
-
-Punto_y_coma
-	:	';'
-	;
-
-Asignacion
-	:	':='
-	;
-
-Letra
-  : ('a' .. 'z') | ('A' .. 'Z')
-  ;
-
-Digito
-  : ('0' .. '9')
-  ;
-
-Inicio_codigo
-	:	'{:'
-	;
-
-Fin_codigo
-	:	':}'
-	;
-
-Codigo
-  : Inicio_codigo Ascii Fin_codigo
-  ;
-
-Ascii
-  : (.)*?
-  ;
-
-Comentario
-  : '/*' Ascii '*/' -> skip
-  ;
-
-WS : [ \r\t\n]+ -> skip ;
+  | ; 
+ 
