@@ -222,11 +222,11 @@ l_automaton
   | ;
 
 automaton
-  : Auto Ident Par_izquierdo Ident Par_derecho Llave_izquierda states Punto_y_coma initial Punto_y_coma transitions Llave_derecha
+  : Auto Ident Par_izquierdo Ident Par_derecho Llave_izquierda states initial transitions Llave_derecha
   ;
   
 states
-  : Sta Asignacion l_states
+  : Sta Asignacion l_states Punto_y_coma
   ;
 
 l_states
@@ -238,7 +238,7 @@ l_states_fact
   | ;
 
 initial
-  : Ini Asignacion Ident
+  : Ini Asignacion Ident Punto_y_coma
   ;
 
 transitions
