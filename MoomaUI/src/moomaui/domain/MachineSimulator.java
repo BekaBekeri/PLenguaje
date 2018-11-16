@@ -1,39 +1,52 @@
 package moomaui.domain;
 
-import java.util.LinkedList;
+import java.util.Stack;
 
-public class MachineSimulator<S extends State, T extends Transition<S>> {
-	private IMooreMachine<S,T> machine;
-	private S currentState;
+public class MachineSimulator {
+	private IMooreMachine machine;
+	private IState currentState;
+	private Stack<IState> previousStates = new Stack<>();
+	private Stack<String> previousInputs = new Stack<>();
 		
-	public MachineSimulator(IMooreMachine<S, T> machine) {
+	public MachineSimulator(IMooreMachine machine) {
 		this.setMachine(machine);
+		this.currentState = this.machine.getInitialState();
 	}
 	
 	public boolean addNewInput(String input) {
-		LinkedList<S> destinationStates = getMachine().getDestinationStates(getCurrentState(), input);
-		if (destinationStates.size() != 1) {
+		IState destinationState = getMachine().getDestinationState(getCurrentState(), input);
+		if (destinationState == null) {
 			return false;
 		}
 		
-		setCurrentState(destinationStates.get(0));
-		getCurrentState().getAction().output();
+		previousStates.push(currentState);
+		previousInputs.push(input);
+		setCurrentState(destinationState);
+		//getCurrentState().getOutput().run();
 		return true;
 	}
 
-	public IMooreMachine<S,T> getMachine() {
+	public IMooreMachine getMachine() {
 		return machine;
 	}
 
-	public void setMachine(IMooreMachine<S,T> machine) {
+	public void setMachine(IMooreMachine machine) {
 		this.machine = machine;
 	}
 
-	public S getCurrentState() {
+	public IState getCurrentState() {
 		return currentState;
 	}
 
-	public void setCurrentState(S currentState) {
+	public void setCurrentState(IState currentState) {
 		this.currentState = currentState;
+	}
+	
+	public IState getPreviousState() {
+		if (previousStates.size() == 0) {
+			return null;
+		} else {
+			return previousStates.peek();
+		}
 	}
 }

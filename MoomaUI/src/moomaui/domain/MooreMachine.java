@@ -2,18 +2,19 @@ package moomaui.domain;
 
 import java.util.LinkedList;
 
-public class MooreMachine<S extends State,T extends Transition<S>> implements IMooreMachine<S, T> {
-	protected LinkedList<S> states;
-	protected LinkedList<T> transitions;
-	protected String name = "Machine";
+public class MooreMachine implements IMooreMachine {
+	protected LinkedList<IState> states;
+	protected LinkedList<ITransition> transitions;
+	protected String name;
+	protected IState initialState;
 	
 	public MooreMachine() {
-		states = new LinkedList<S>();
-		transitions = new LinkedList<T>();
+		states = new LinkedList<IState>();
+		transitions = new LinkedList<ITransition>();
 	}
 	
 	@Override
-	public boolean addState(S state) {
+	public boolean addState(IState state) {
 		if (!hasState(state)) {
 			states.add(state);
 			return true;
@@ -23,7 +24,7 @@ public class MooreMachine<S extends State,T extends Transition<S>> implements IM
 	}
 
 	@Override
-	public boolean addTransition(T transition) {
+	public boolean addTransition(ITransition transition) {
 		if (hasState(transition.getFromState()) && hasState(transition.getToState())) {
 			transitions.add(transition);
 			return true;
@@ -32,34 +33,50 @@ public class MooreMachine<S extends State,T extends Transition<S>> implements IM
 	}
 	
 	@Override
-	public boolean removeState(S state) {
-		// TODO Auto-generated method stub
+	public boolean removeState(IState state) {
 		return false;
 	}
 	@Override
-	public boolean removeTransition(T transition) {
-		// TODO Auto-generated method stub
+	public boolean removeTransition(ITransition transition) {
 		return false;
 	}
 
 	@Override
-	public LinkedList<S> getStates() {
+	public LinkedList<IState> getStates() {
 		return this.states;
 	}
 
 	@Override
-	public LinkedList<S> getDestinationStates(S originState, String input) {
-		LinkedList<S> destinationStates = new LinkedList<>();
-		for (Transition<S> t : transitions) {
-			if (t.getFromState().equals(originState) && t.getInput().equals(input))
-				destinationStates.add(t.getToState());
+	public IState getDestinationState(IState originState, String input) {
+		for (ITransition t : transitions) {
+			if (t.getFromState().equals(originState) && t.getInputs().contains(input))
+				return t.getToState();
 		}
-		return destinationStates;
+		return null;
 	}
 	
 	@Override
-	public LinkedList<T> getTransitions() {
+	public LinkedList<ITransition> getTransitions() {
 		return this.transitions;
+	}
+
+	@Override
+	public IState getInitialState() {
+		return this.initialState;
+	}
+
+	@Override
+	public void setInitialState(IState initialState) {
+		this.setInitialState(initialState, false);
+	}
+
+	@Override
+	public void setInitialState(IState initialState, boolean overwrite) {
+		if (initialState == null && !overwrite) {
+			throw new RuntimeException("The initial state is already defined");
+		} else {
+			this.initialState = initialState;
+		}
 	}
 	
 	@Override
@@ -72,8 +89,8 @@ public class MooreMachine<S extends State,T extends Transition<S>> implements IM
 		this.name = name;
 	}
 	
-	public boolean hasState(State state) {
-		for (State st : states) {
+	public boolean hasState(IState state) {
+		for (IState st : states) {
 			if (state.equals(st))
 				return true;
 		}

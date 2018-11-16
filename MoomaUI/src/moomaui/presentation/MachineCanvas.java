@@ -1,86 +1,112 @@
 package moomaui.presentation;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import moomaui.domain.IMooreMachine;
-import moomaui.domain.MooreMachine;
+import moomaui.domain.IState;
+import moomaui.domain.ITransition;
+import moomaui.domain.MachineController;
+import moomaui.domain.OutputInterface;
 import moomaui.presentation.drawing.DrawableState;
 import moomaui.presentation.drawing.DrawableTransition;
 import moomaui.presentation.drawing.JDrawer;
 
-public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableState, DrawableTransition> {
+public class MachineCanvas extends JDrawer implements IState{
 	private static final long serialVersionUID = 1L;
-	private IMooreMachine<DrawableState, DrawableTransition> mMachine;
+	private MachineController<String> controller;
 	private DrawableState selectedState = null;
+	private boolean isInitialized = false; // Indicates whether the state positions are initialized
+
+	private LinkedList<DrawableState> states = new LinkedList<>();
+	private LinkedList<DrawableTransition> transitions = new LinkedList<>();
+	private String machineName;
+	private DrawableState initialState;
+	private DrawableState currentState;
 	
 	public static final int STATE_RADIUS = 28;
 	public static final int STATE_OFFSET = 6;
 	public static final int TRANSITION_STROKE = 2;
+	public static final int FONT_SIZE = 15;
 	public static final int ARROW_SIZE = 7;
 	public static final int MACHINE_DEFAULT_RADIUS = 130;
 	public static final int ARC_LINE_CONTROL_POINT_OFFSET = 70;
+	public static final String TRANSITION_SEPARATOR = ", ";
+	public static final int TEXT_FROM_LINE_SEPARATION = 15;
 
-	public MachineCanvas() {
-		mMachine = new MooreMachine<DrawableState, DrawableTransition>();
-	}
+	public static final Color OUTSIDE_CIRCLE_STATE_DEFAULT = Color.BLACK;
+	public static final Color INSIDE_CIRCLE_STATE_DEFAULT = Color.LIGHT_GRAY;
+	public static final Color INSIDE_CIRCLE_STATE_SELECTED = Color.GREEN;
+	public static final Color INSIDE_CIRCLE_STATE_CANDIDATE = Color.CYAN;
 	
-	public MachineCanvas(IMooreMachine<DrawableState, DrawableTransition> mMachine) {
-		this.mMachine = mMachine;
+	public MachineCanvas(MachineController<String> controller) {
+		this.controller = controller;
 		
-		for (DrawableState state : mMachine.getStates()) {
-			this.addGraphicObject(state);
+		for (IState state : controller.getStates()) {
+			DrawableState newState = new DrawableState(state.getName());
+			states.add(newState);
+			this.addGraphicObject(newState);
+			
+			if (state.equals(controller.getInitialState())) 
+				this.initialState = newState;
 		}
-		for (DrawableTransition transition : mMachine.getTransitions()) {
-			this.addGraphicObject(transition);
+		for (ITransition transition : controller.getTransitions()) {
+			DrawableState fromState = states.get(states.indexOf(new DrawableState(transition.getFromState().getName())));
+			DrawableState toState = states.get(states.indexOf(new DrawableState(transition.getToState().getName())));
+			DrawableTransition newTransition = new DrawableTransition(fromState, toState, transition.getInputs());
+			transitions.add(newTransition);
+			this.addGraphicObject(newTransition);
 		}
 	}
 	
 	@Override
 	public void paint(Graphics g){
-		// If the states positions are not initialized then initialize them
-		if (mMachine.getStates().stream().allMatch(p -> p.getX() < -1 && p.getY() < -1)) {
-			int[][] coords = MachineCanvas.generateRegularPolygon(mMachine.getStates().size(), MACHINE_DEFAULT_RADIUS);
-			Dimension size = this.getSize();
-			int xOffset = size.width / 2;
-			int yOffset = size.height / 2;
-			for (int i = 0; i < mMachine.getStates().size(); i++) {
-				DrawableState st = mMachine.getStates().get(i);
-				st.setX(coords[i][0] + xOffset);
-				st.setY(coords[i][1] + yOffset);
-			}
+		if (!isInitialized) {
+			initializePositions();
+			initializeStates();
+			//initializeTransitions();
+			isInitialized = true;
 		}
-		super.paint(g);	
+		
+		super.paint(g);
+	}
+
+	private void initializePositions() {
+		int[][] coords = MachineCanvas.generateRegularPolygon(states.size(), MACHINE_DEFAULT_RADIUS);
+		Dimension size = this.getSize();
+		int xOffset = size.width / 2;
+		int yOffset = size.height / 2;
+		for (int i = 0; i < states.size(); i++) {
+			DrawableState st = states.get(i);
+			st.setX(coords[i][0] + xOffset);
+			st.setY(coords[i][1] + yOffset);
+		}
 	}
 	
-	@Override
-	public boolean addState(DrawableState state) {
-		if (mMachine.addState(state)) {
-			this.addGraphicObject(state);
-			return true;
+	private void initializeStates() {
+		for (DrawableState state : states) {
+			if (state.equals(new DrawableState(controller.getCurrentState().getName()))) {
+				state.setInnerColor(MachineCanvas.INSIDE_CIRCLE_STATE_SELECTED);
+				this.currentState = state;
+			}
 		}
-		return false;
 	}
-	@Override
-	public boolean addTransition(DrawableTransition transition) {
-		if (mMachine.addTransition(transition)) {
-			this.addGraphicObject(transition);
-			return true;
-		}
-		return false;
+	
+	private void initializeTransitions() {
+		
 	}
-
-	@Override
-	public boolean removeState(DrawableState state) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public DrawableState getCurrentState() {
+		return this.currentState;
 	}
-
-	@Override
-	public boolean removeTransition(DrawableTransition transition) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public void setCurrentState(DrawableState currentState) {
+		this.currentState = currentState;
+	}
+	
+	public MachineController<String> getController() {
+		return this.controller;
 	}
 
 	public DrawableState getSelectedState() {
@@ -91,34 +117,29 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 		this.selectedState = selectedState;
 	}
 
-	@Override
 	public LinkedList<DrawableState> getStates() {
-		return mMachine.getStates();
+		return states;
 	}
 
-	@Override
-	public LinkedList<DrawableState> getDestinationStates(DrawableState originState, String input) {
-		return mMachine.getDestinationStates(originState, input);
+	public IState getDestinationStates(DrawableState originState, String input) {
+		return controller.getTransitionDestination(originState.getText(), input);
 	}
 
-	@Override
 	public LinkedList<DrawableTransition> getTransitions() {
-		return mMachine.getTransitions();
+		return transitions;
 	}
 
-	@Override
 	public String getMachineName() {
-		return mMachine.getMachineName();
+		return this.machineName;
 	}
 
-	@Override
 	public void setMachineName(String name) {
-		mMachine.setMachineName(name);
+		this.machineName = name;
 	}
 	
 	public DrawableState getStateInPosition(int x, int y) {
 		DrawableState state = null;
-		double best = 1000000000;
+		double best = Double.MAX_VALUE;
 		
 		for (DrawableState st : this.getStates()) {
 			double dist = euclideanDistance(x, st.getX(), y, st.getY());
@@ -128,5 +149,17 @@ public class MachineCanvas extends JDrawer implements IMooreMachine<DrawableStat
 			}
 		}
 		return state;
+	}
+
+	@Override
+	public OutputInterface getOutput() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setOutput(OutputInterface output) {
+		// TODO Auto-generated method stub
+		
 	}
 }

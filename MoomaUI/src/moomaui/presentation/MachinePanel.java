@@ -2,6 +2,7 @@ package moomaui.presentation;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -10,7 +11,10 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import moomaui.domain.IState;
+import moomaui.domain.MachineController;
 import moomaui.domain.MachineSimulator;
+import moomaui.domain.MooreMachine;
 import moomaui.presentation.drawing.DrawableState;
 import moomaui.presentation.drawing.DrawableTransition;
 
@@ -21,15 +25,19 @@ import java.awt.Dimension;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.DebugGraphics;
+import javax.swing.DefaultListModel;
+
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.JList;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MachinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField txtInput;
 	private MachineCanvas lblMachineCanvas;
-	private MachineSimulator<DrawableState, DrawableTransition> simulator;
 	private JPanel pnlOutput;
 	private JBottomToTopTextAreaPanel pnlBottomOutput;
 	private JSeparator separator;
@@ -37,9 +45,17 @@ public class MachinePanel extends JPanel {
 	private Component horizontalStrut;
 	private JPanel pnlTextOutput;
 	private JLabel lblMachineOutput;
-	private Component verticalStrut;
 	private Component horizontalStrut_1;
 	private JPanel pnlMachine;
+	
+	private DrawableState lastPaintedState;
+	private JList<String> lstInputs;
+	DefaultListModel<String> lstInputModel = new DefaultListModel<>();
+	private JPanel pnlBottom;
+	private JPanel pnlInteract;
+	private JButton btnAddInput;
+	private JButton btnRemoveInput;
+	private JPanel pnlButtons;
 
 	/**
 	 * Create the panel.
@@ -50,11 +66,6 @@ public class MachinePanel extends JPanel {
 		pnlMachine = new JPanel();
 		add(pnlMachine, BorderLayout.CENTER);
 		pnlMachine.setLayout(new BorderLayout(0, 0));
-		
-		txtInput = new JTextField();
-		pnlMachine.add(txtInput, BorderLayout.SOUTH);
-		txtInput.setColumns(10);
-		txtInput.getDocument().addDocumentListener(new TextChangeListener());
 		
 		pnlOutput = new JPanel();
 		add(pnlOutput, BorderLayout.EAST);
@@ -80,48 +91,98 @@ public class MachinePanel extends JPanel {
 		pnlOutput.add(pnlTextOutput, BorderLayout.CENTER);
 		pnlTextOutput.setLayout(new BorderLayout(0, 0));
 		
-		pnlBottomOutput = new JBottomToTopTextAreaPanel();
+		//pnlBottomOutput = new JBottomToTopTextAreaPanel();
 		
 		lblMachineOutput = new JLabel("Machine Output");
 		lblMachineOutput.setHorizontalAlignment(SwingConstants.CENTER);
-		pnlTextOutput.add(lblMachineOutput, BorderLayout.NORTH);
-		pnlTextOutput.add(pnlBottomOutput, BorderLayout.CENTER);
+		//pnlTextOutput.add(lblMachineOutput, BorderLayout.NORTH);
+		//pnlTextOutput.add(pnlBottomOutput, BorderLayout.CENTER);
 		
-		verticalStrut = Box.createVerticalStrut(20);
-		verticalStrut.setPreferredSize(new Dimension(0, 4));
-		pnlTextOutput.add(verticalStrut, BorderLayout.SOUTH);
+		lstInputs = new JList<>(lstInputModel);
+		lstInputs.setPreferredSize(new Dimension(175, 0));
+		pnlTextOutput.add(lstInputs, BorderLayout.CENTER);
+		
+		pnlBottom = new JPanel();
+		pnlTextOutput.add(pnlBottom, BorderLayout.SOUTH);
+		pnlBottom.setLayout(new BorderLayout(0, 0));
+		
+		pnlInteract = new JPanel();
+		pnlBottom.add(pnlInteract, BorderLayout.CENTER);
+		pnlInteract.setLayout(new BorderLayout(0, 0));
+		
+		txtInput = new JTextField();
+		pnlInteract.add(txtInput);
+		txtInput.setColumns(10);
+		
+		pnlButtons = new JPanel();
+		pnlInteract.add(pnlButtons, BorderLayout.SOUTH);
+		
+		btnAddInput = new JButton("Add Input");
+		btnAddInput.addActionListener(new BtnAddInputActionListener());
+		pnlButtons.add(btnAddInput);
+		
+		btnRemoveInput = new JButton("Remove Input");
+		btnRemoveInput.addActionListener(new BtnRemoveInputActionListener());
+		pnlButtons.add(btnRemoveInput);
+		txtInput.getDocument().addDocumentListener(new TextChangeListener());
 		
 		horizontalStrut_1 = Box.createHorizontalStrut(20);
 		horizontalStrut_1.setPreferredSize(new Dimension(4, 0));
 		pnlTextOutput.add(horizontalStrut_1, BorderLayout.EAST);
-		lblMachineCanvas = new MachineCanvas();
-		
-		simulator = new MachineSimulator<DrawableState, DrawableTransition>(lblMachineCanvas);
+		lblMachineCanvas = null; //new MachineCanvas(new MachineController(new MooreMachine()));
 	}
 	
 	public MachinePanel(MachineCanvas canvas) {
 		this();
 		this.lblMachineCanvas = canvas;
-		this.simulator.setMachine(canvas);
 		pnlMachine.add(lblMachineCanvas, BorderLayout.CENTER);
 		lblMachineCanvas.addMouseMotionListener(new CanvasMouseMotionListener());
 		lblMachineCanvas.addMouseListener(new CanvasMouseListener());
-		simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
+		//simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
 	}
 	
 	public MachineCanvas getMachineCanvas() {
 		return lblMachineCanvas;
+	}
+		
+	public void resetState() {
+		if (lastPaintedState != null) 
+			lastPaintedState.setInnerColor(MachineCanvas.INSIDE_CIRCLE_STATE_DEFAULT);
+		
+		lastPaintedState = null;			
+	}
+	
+	public void updateCandidateState(String input) {
+		IState currentState = lblMachineCanvas.getController().getCurrentState();
+		IState destination = lblMachineCanvas.getController().getTransitionDestination(currentState.getName(), input);
+		
+		if (destination != null) {
+			for (DrawableState state : lblMachineCanvas.getStates()) {
+				if (state.equals(new DrawableState(destination.getName()))) {
+					state.setInnerColor(MachineCanvas.INSIDE_CIRCLE_STATE_CANDIDATE);
+					lastPaintedState = state;
+				}
+			}
+		}
+	}
+	
+	public void updateCurrentState(DrawableState newCurrentState) {
+		lblMachineCanvas.getCurrentState().setInnerColor(MachineCanvas.INSIDE_CIRCLE_STATE_DEFAULT);
+		
+		for (DrawableState state : lblMachineCanvas.getStates()) {
+			if (state.equals(newCurrentState)) {
+				state.setInnerColor(MachineCanvas.INSIDE_CIRCLE_STATE_SELECTED);
+				lblMachineCanvas.setCurrentState(state);
+			}
+		}
 	}
 	
 	private class CanvasMouseListener extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			DrawableState st = lblMachineCanvas.getStateInPosition(e.getX(), e.getY());
-			if (st != null && st.getAction() != null) { // TODO: Remove code
-				st.getAction().output();
-			}
 			if (st != null) {
-				lblMachineCanvas.setText("Single Click  State: " + st.getName());
+				lblMachineCanvas.setText("Single Click  State: " + st.getText());
 				lblMachineCanvas.setSelectedState(st);
 			} else {
 				lblMachineCanvas.setText("Single Click  " + e.getX() + "  " + e.getY());
@@ -151,35 +212,57 @@ public class MachinePanel extends JPanel {
 		@Override
 		public void insertUpdate(DocumentEvent e) {
 			//System.out.println("Insertion, index: " + e.getOffset());
-			changed();
+			changed(e);
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			//System.out.println("Removal, index: " + e.getOffset());
-			changed();
+			changed(e);
 		}
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
 			//System.out.println("Changed, index: " + e.getOffset());
-			changed();
+			changed(e);
 		}
 		
-		public void changed() {
-			if (txtInput.getText().equals(""))
-				simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
-			else if (txtInput.getText().endsWith(" ")) {
-				String[] inputs = txtInput.getText().split(" ");
-				for (String input : inputs) {
-					if (!simulator.addNewInput(input)) {
-						System.out.format("No available transition from %s with input %s, aborting\n", simulator.getCurrentState().getName(), input);
-						break;
-					}
+		public void changed(DocumentEvent e) {
+			resetState();
+			String[] inputs = txtInput.getText().split(" ");
+			
+			if (txtInput.getText().length() <= 0 || inputs.length <= 0)
+				return;
+			
+			if (inputs.length != 0) {
+				String input = inputs[inputs.length - 1];
+				if (Character.isDigit(txtInput.getText().charAt(txtInput.getText().length() - 1))) {
+						updateCandidateState(input);
+				} else {
+					// Error
 				}
 			}
+			lblMachineCanvas.repaint();
+		}		
+	}
+	private class BtnAddInputActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			IState nextState = lblMachineCanvas.getController().addNewInput(txtInput.getText().trim());
+			if (nextState != null) {
+				lstInputModel.addElement(String.format("%s,%s -> %s", lblMachineCanvas.getController().getPreviousState().getName(), txtInput.getText().trim(), nextState.getName()));
+				MachinePanel.this.updateCurrentState(new DrawableState(nextState.getName()));
+				lastPaintedState = null;
+				nextState.getOutput().run();
+				
+				txtInput.setText("");
+			} else {
+			}
+			lblMachineCanvas.repaint();
 		}
-		
+	}
+	private class BtnRemoveInputActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+		}
 	}
 
 }

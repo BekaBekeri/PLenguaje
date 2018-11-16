@@ -95,9 +95,9 @@ public class JDrawer extends JLabel {
 		});
 		
 		for (GraphicObject obj : sortedGraphics) {
-			
+			obj.paint((Graphics2D) g);
 			// Drawing lines
-			if (obj instanceof ArcArrowLineObject) { // Draw line and arrow
+			/*if (obj instanceof ArcArrowLineObject) { // Draw line and arrow
 				Graphics2D g2 = (Graphics2D) g;
 				ArrowLineObject aObj = (ArrowLineObject) obj;
 				g2.setStroke(new BasicStroke(((LineObject)obj).getStroke()));
@@ -175,7 +175,7 @@ public class JDrawer extends JLabel {
 				
 				g.setColor(((TextObject) obj).getColor());
 				g.drawString(((TextObject) obj).getText(), obj.getX() - width / 2, obj.getY() + height / 4);
-			}
+			}*/
 		}
 	}
 	

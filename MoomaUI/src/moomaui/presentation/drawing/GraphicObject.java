@@ -1,6 +1,7 @@
 package moomaui.presentation.drawing;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 
 public interface GraphicObject {
 	int getX();
@@ -9,4 +10,6 @@ public interface GraphicObject {
 	void setX(int X);
 	void setY(int Y);
 	void setColor(Color color);
+	
+	void paint(Graphics2D g2);
 }

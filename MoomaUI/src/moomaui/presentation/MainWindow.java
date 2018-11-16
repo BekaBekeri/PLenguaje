@@ -1,7 +1,6 @@
 package moomaui.presentation;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,6 +16,10 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+
+import moomaui.domain.IMooreMachine;
+import moomaui.domain.MachineController;
+import moomaui.domain.Machines;
 
 public class MainWindow {
 
@@ -93,23 +96,25 @@ public class MainWindow {
 	private void initializeMachines() {
 		Method[] machineGenerators = Machines.class.getDeclaredMethods();
 		for (Method machineGenerator : machineGenerators) {
-			MachineCanvas machine = null;
+			IMooreMachine machine = null;
 			try {
-				// Check if method returns a MachineCanvas
+				// Check if method is static
 				if (!Modifier.isStatic(machineGenerator.getModifiers())) {
 					ROOT_LOGGER.log(Level.WARNING, String.format("Method %s is not static and its machine will not be added.", machineGenerator.getName()));
 					continue;
-				}
-				else if (machineGenerator.getReturnType() == MachineCanvas.class)
-					machine = (MachineCanvas) machineGenerator.invoke(null);
+				} // Check if method returns a MachineCanvas
+				else if (machineGenerator.getReturnType() == IMooreMachine.class)
+					machine = (IMooreMachine) machineGenerator.invoke(null);
 				else
 					continue;
 			} catch (NullPointerException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				ROOT_LOGGER.log(Level.SEVERE, e.getMessage(), e);
 				continue;
 			}
+			
+			MachineController<String> mController = new MachineController<String>(machine);
 
-			MachinePanel pnl = new MachinePanel(machine);
+			MachinePanel pnl = new MachinePanel(new MachineCanvas(mController));
 			machinePanels.add(pnl);
 			pnlMachines.addTab(machine.getMachineName(), pnl);
 			LOGGER.log(Level.INFO, String.format("%s added with method %s", machine.getMachineName(), machineGenerator.getName()));

@@ -1,8 +1,8 @@
 package moomaui.domain;
 
-public class State {
+public class State implements IState {
 	protected String name;
-	private OutputInterface action;
+	private OutputInterface output;
 	
 	public State(String name) {
 		this.name = name;
@@ -23,11 +23,11 @@ public class State {
 		this.name = name;
 	}
 
-	public OutputInterface getAction() {
-		return action;
+	public OutputInterface getOutput() {
+		return output;
 	}
 
-	public void setAction(OutputInterface action) {
-		this.action = action;
+	public void setOutput(OutputInterface output) {
+		this.output = output;
 	}
 }
