@@ -25,12 +25,12 @@ public class Machines {
 		return canvas;
 	}*/
 
-	public static IMooreMachine examplemachine2() {
+	/*public static IMooreMachine examplemachine2() {
 		MooreMachine machine = new MooreMachine(); machine.setMachineName("Example Machine");
 		
-		State st1 = new State("1"); st1.setOutput(() -> System.out.println("Primer Estado"));
-		State st2 = new State("2"); st2.setOutput(() -> System.out.println("Segundo Estado"));
-		State st3 = new State("3"); st3.setOutput(() -> System.out.println("Tercer Estado"));
+		State st1 = new State("q0"); st1.setOutput(() -> System.out.println("Primer Estado"));
+		State st2 = new State("q1"); st2.setOutput(() -> System.out.println("Segundo Estado"));
+		State st3 = new State("q2"); st3.setOutput(() -> System.out.println("Tercer Estado"));
 
 		Transition t1 = new Transition(st1, st2, new String[] {"1", "2"});
 		Transition t2 = new Transition(st2, st1, "10");
@@ -44,6 +44,35 @@ public class Machines {
 		machine.addTransition(t3);
 
 		machine.setInitialState(st1);
+
+		return machine;
+	}*/
+
+	public static IMooreMachine binaryNOT() {
+		MooreMachine machine = new MooreMachine(); machine.setMachineName("Binary NOT");
+		
+		State st0 = new State("q0"); st0.setOutput(() -> System.out.print(""));
+		State st1 = new State("q1"); st1.setOutput(() -> System.out.print("0"));
+		State st2 = new State("q2"); st2.setOutput(() -> System.out.print("1"));
+
+		Transition t1 = new Transition(st0, st1, "1");
+		Transition t2 = new Transition(st0, st2, "0");
+		Transition t3 = new Transition(st1, st1, "1");
+		Transition t4 = new Transition(st2, st2, "0");
+		Transition t5 = new Transition(st1, st2, "0");
+		Transition t6 = new Transition(st2, st1, "1");
+		
+		machine.addState(st0);
+		machine.addState(st1);
+		machine.addState(st2);
+		machine.addTransition(t1);
+		machine.addTransition(t2);
+		machine.addTransition(t3);
+		machine.addTransition(t4);
+		machine.addTransition(t5);
+		machine.addTransition(t6);
+
+		machine.setInitialState(st0);
 
 		return machine;
 	}
