@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.geom.GeneralPath;
+import java.security.InvalidAlgorithmParameterException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -17,6 +18,7 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 	protected LinkedList<String> inputs;
 	
 	protected boolean isCurved;	
+	protected boolean isSelf;
 	protected Color color = Color.BLACK;
 	protected int stroke = MachineCanvas.TRANSITION_STROKE;
 	protected int arrowSize = MachineCanvas.ARROW_SIZE;
@@ -29,11 +31,13 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		this.toState = toState;
 		this.inputs = new LinkedList<String>();
 		this.inputs.add(input);
+		this.isSelf = fromState.equals(toState);
 	}
 	public DrawableTransition(DrawableState fromState, DrawableState toState, LinkedList<String> inputs) {
 		this.fromState = fromState;
 		this.toState = toState;
 		this.inputs = new LinkedList<String>();
+		this.isSelf = fromState.equals(toState);
 		
 		for (String input : inputs) {
 			this.inputs.add(input);
@@ -204,11 +208,15 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 
 	@Override
 	public void paint(Graphics2D g2) {
-		if (!isCurved) {
+		if (!isCurved && !isSelf) {
 			paintStraightArrow(g2);			
 			paintStraightArrowText(g2);
-		} else {
+		} else if (!isCurved && isSelf) {
+			
+		} else if (isCurved && !isSelf) {
 			paintCurvedLineArrow(g2);
+		} else {
+			throw new InternalError("Transition cannot be curved and self");
 		}
 	}
 	

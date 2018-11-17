@@ -98,7 +98,8 @@ public class MachineCanvas extends JDrawer implements IState{
 	private void initializeTransitions() {
 		for (DrawableTransition t1 : transitions) {
 			for (DrawableTransition t2 : transitions) {
-				if (t1.getFromState().equals(t2.getToState()) && t1.getToState().equals(t2.getFromState())) {
+				if (!t1.getFromState().equals(t1.getToState()) &&
+						t1.getFromState().equals(t2.getToState()) && t1.getToState().equals(t2.getFromState())) {
 					t1.setIsCurved(true);
 					t2.setIsCurved(true);
 				}
