@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import java.awt.Dimension;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.DebugGraphics;
 import javax.swing.DefaultListModel;
 
@@ -32,6 +33,8 @@ import javax.swing.Box;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MachinePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -115,6 +118,7 @@ public class MachinePanel extends JPanel {
 		pnlInteract.setLayout(new BorderLayout(0, 0));
 		
 		txtInput = new JTextField();
+		txtInput.addKeyListener(new TxtInputKeyListener());
 		pnlInteract.add(txtInput);
 		txtInput.setColumns(10);
 		
@@ -150,8 +154,11 @@ public class MachinePanel extends JPanel {
 	}
 		
 	public void resetState() {
-		if (lastPaintedState != null) 
+		if (lastPaintedState != null && !lblMachineCanvas.getCurrentState().equals(lastPaintedState)) { 
 			lastPaintedState.setInnerColor(MachineCanvas.INSIDE_CIRCLE_STATE_DEFAULT);
+		} else if (lastPaintedState != null) {
+			lastPaintedState.setInnerColor(MachineCanvas.INSIDE_CIRCLE_STATE_SELECTED);
+		}
 		
 		lastPaintedState = null;			
 	}
@@ -235,15 +242,14 @@ public class MachinePanel extends JPanel {
 			resetState();
 			String[] inputs = txtInput.getText().split(" ");
 			
-			if (txtInput.getText().length() <= 0 || inputs.length <= 0)
-				return;
-			
-			if (inputs.length != 0) {
-				String input = inputs[inputs.length - 1];
-				if (Character.isDigit(txtInput.getText().charAt(txtInput.getText().length() - 1))) {
-						updateCandidateState(input);
-				} else {
-					// Error
+			if (txtInput.getText().length() > 0 & inputs.length > 0) {				
+				if (inputs.length != 0) {
+					String input = inputs[inputs.length - 1];
+					if (Character.isDigit(txtInput.getText().charAt(txtInput.getText().length() - 1))) {
+							updateCandidateState(input);
+					} else {
+						// Error
+					}
 				}
 			}
 			lblMachineCanvas.repaint();
