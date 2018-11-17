@@ -152,6 +152,10 @@ public class MachinePanel extends JPanel {
 	public MachineCanvas getMachineCanvas() {
 		return lblMachineCanvas;
 	}
+	
+	public Component getTxtInput() {
+		return txtInput;
+	}
 		
 	public void resetState() {
 		if (lastPaintedState != null && !lblMachineCanvas.getCurrentState().equals(lastPaintedState)) { 

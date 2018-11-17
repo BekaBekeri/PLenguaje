@@ -20,6 +20,13 @@ import javax.swing.SwingUtilities;
 import moomaui.domain.IMooreMachine;
 import moomaui.domain.MachineController;
 import moomaui.domain.Machines;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.WindowStateListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 public class MainWindow {
 
@@ -85,11 +92,13 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.addWindowFocusListener(new FrameWindowFocusListener());
 		frame.setBounds(100, 100, 820, 531);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		pnlMachines = new JTabbedPane(JTabbedPane.TOP);
+		pnlMachines.addChangeListener(new PnlMachinesChangeListener());
 		frame.getContentPane().add(pnlMachines, BorderLayout.CENTER);
 	}
 	
@@ -118,6 +127,23 @@ public class MainWindow {
 			machinePanels.add(pnl);
 			pnlMachines.addTab(machine.getMachineName(), pnl);
 			LOGGER.log(Level.INFO, String.format("%s added with method %s", machine.getMachineName(), machineGenerator.getName()));
+		}
+	}
+	
+	private boolean requestFocusOnCurrentTextInput() {
+		return ((MachinePanel)pnlMachines.getSelectedComponent()).getTxtInput().requestFocusInWindow();
+	}
+	
+	private class PnlMachinesChangeListener implements ChangeListener {
+		public void stateChanged(ChangeEvent e) {
+			requestFocusOnCurrentTextInput();
+		}
+	}
+	private class FrameWindowFocusListener implements WindowFocusListener {
+		public void windowGainedFocus(WindowEvent e) {
+			requestFocusOnCurrentTextInput();
+		}
+		public void windowLostFocus(WindowEvent e) {
 		}
 	}
 }
