@@ -39,7 +39,6 @@ public class MachinePanel extends JPanel {
 	private JTextField txtInput;
 	private MachineCanvas lblMachineCanvas;
 	private JPanel pnlOutput;
-	private JBottomToTopTextAreaPanel pnlBottomOutput;
 	private JSeparator separator;
 	private JPanel pnlSpacers;
 	private Component horizontalStrut;
@@ -56,6 +55,7 @@ public class MachinePanel extends JPanel {
 	private JButton btnAddInput;
 	private JButton btnRemoveInput;
 	private JPanel pnlButtons;
+	private JLabel lblMachineInputs;
 
 	/**
 	 * Create the panel.
@@ -95,6 +95,10 @@ public class MachinePanel extends JPanel {
 		
 		lblMachineOutput = new JLabel("Machine Output");
 		lblMachineOutput.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		lblMachineInputs = new JLabel("Machine inputs");
+		lblMachineInputs.setHorizontalAlignment(SwingConstants.CENTER);
+		pnlTextOutput.add(lblMachineInputs, BorderLayout.NORTH);
 		//pnlTextOutput.add(lblMachineOutput, BorderLayout.NORTH);
 		//pnlTextOutput.add(pnlBottomOutput, BorderLayout.CENTER);
 		
