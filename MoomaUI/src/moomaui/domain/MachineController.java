@@ -38,6 +38,10 @@ public class MachineController<T> {
 			return null;
 	}
 	
+	public IState removeInput() {
+		return simulator.removeInput();
+	}
+	
 	public IState getCurrentState() {
 		return simulator.getCurrentState();
 	}

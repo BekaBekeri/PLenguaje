@@ -25,6 +25,14 @@ public class MachineSimulator {
 		//getCurrentState().getOutput().run();
 		return true;
 	}
+	
+	public IState removeInput() {
+		if (!previousStates.isEmpty()) {
+			previousInputs.pop();
+			return previousStates.pop();
+		}
+		return null;
+	}
 
 	public IMooreMachine getMachine() {
 		return machine;

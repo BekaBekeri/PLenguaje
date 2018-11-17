@@ -262,6 +262,13 @@ public class MachinePanel extends JPanel {
 	}
 	private class BtnRemoveInputActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			if (!lstInputModel.isEmpty()) {
+				IState removedState = lblMachineCanvas.getController().removeInput();
+				lstInputModel.removeElementAt(lstInputModel.getSize() - 1);
+				MachinePanel.this.updateCurrentState(new DrawableState(removedState.getName()));	
+				lastPaintedState = null;			
+			}
+			lblMachineCanvas.repaint();
 		}
 	}
 
