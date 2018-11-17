@@ -281,5 +281,13 @@ public class MachinePanel extends JPanel {
 			lblMachineCanvas.repaint();
 		}
 	}
+	private class TxtInputKeyListener extends KeyAdapter {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				btnAddInput.doClick();
+			}
+		}
+	}
 
 }
