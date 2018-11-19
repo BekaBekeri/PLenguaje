@@ -30,6 +30,7 @@ public class MachineCanvas extends JDrawer implements IState{
 	public static final int TRANSITION_STROKE = 2;
 	public static final int FONT_SIZE = 15;
 	public static final int ARROW_SIZE = 7;
+	public static final int INITIAL_ARROW_SIZE = 11;
 	public static final int MACHINE_DEFAULT_RADIUS = 130;
 	public static final int ARC_LINE_CONTROL_POINT_OFFSET = 75;
 	public static final int ARC_LINE_CONTROL_POINT_TEXT_OFFSET = 62;
@@ -98,8 +99,11 @@ public class MachineCanvas extends JDrawer implements IState{
 	private void initializeTransitions() {
 		for (DrawableTransition t1 : transitions) {
 			for (DrawableTransition t2 : transitions) {
-				if (!t1.getFromState().equals(t1.getToState()) &&
-						t1.getFromState().equals(t2.getToState()) && t1.getToState().equals(t2.getFromState())) {
+				if (t1.getFromState().equals(t1.getToState())) {
+					/*if (t1.getFromState().equals(initialState))
+						t1.setInitial(true);*/						
+				} 
+				else if (t1.getFromState().equals(t2.getToState()) && t1.getToState().equals(t2.getFromState())) {
 					t1.setIsCurved(true);
 					t2.setIsCurved(true);
 				}

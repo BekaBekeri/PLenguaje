@@ -17,8 +17,9 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 	protected DrawableState toState;
 	protected LinkedList<String> inputs;
 	
-	protected boolean isCurved;	
+	protected boolean isCurved;
 	protected boolean isSelf;
+	private boolean isInitial;
 	protected Color color = Color.BLACK;
 	protected int stroke = MachineCanvas.TRANSITION_STROKE;
 	protected int arrowSize = MachineCanvas.ARROW_SIZE;
@@ -32,12 +33,14 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		this.inputs = new LinkedList<String>();
 		this.inputs.add(input);
 		this.isSelf = fromState.equals(toState);
+		this.isCurved = this.isSelf;
 	}
 	public DrawableTransition(DrawableState fromState, DrawableState toState, LinkedList<String> inputs) {
 		this.fromState = fromState;
 		this.toState = toState;
 		this.inputs = new LinkedList<String>();
 		this.isSelf = fromState.equals(toState);
+		this.isCurved = this.isSelf;
 		
 		for (String input : inputs) {
 			this.inputs.add(input);
@@ -62,27 +65,35 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 	
 	@Override
 	public int getDeltaX1() {
+		return getDeltaX1(this.getArrowSize());
+	}
+	
+	private int getDeltaX1(int arrowSize) {
 		if (!isCurved) {
 			double radiusScale = Math.cos(MachineCanvas.angleBetweenPoints(fromState.getX(), toState.getX(), fromState.getY(), toState.getY()));
-			return (int) (toState.getX() - (toState.getRadius() + arrowSize / 2) * radiusScale);
+			return (int) (toState.getX() - (toState.getRadius() + arrowSize - 2) * radiusScale);
 		} else {
 			int[] controlPoint = getControlPoint();
 			
 			double radiusScale = Math.cos(MachineCanvas.angleBetweenPoints(controlPoint[0], toState.getX(), controlPoint[1], toState.getY()));
-			return (int) (toState.getX() - (toState.getRadius() + arrowSize / 2) * radiusScale);
+			return (int) (toState.getX() - (toState.getRadius() + arrowSize - 2) * radiusScale);
 		}
 	}
 
 	@Override
 	public int getDeltaY1() {
+		return getDeltaY1(this.getArrowSize());
+	}
+
+	private int getDeltaY1(int arrowSize) {
 		if (!isCurved) {
 			double radiusScale = Math.sin(MachineCanvas.angleBetweenPoints(fromState.getX(), toState.getX(), fromState.getY(), toState.getY()));
-			return (int) (toState.getY() - (toState.getRadius() + arrowSize / 2) * radiusScale);
+			return (int) (toState.getY() - (toState.getRadius() + arrowSize - 2) * radiusScale);
 		} else {
 			int[] controlPoint = getControlPoint();
 			
 			double radiusScale = Math.sin(MachineCanvas.angleBetweenPoints(controlPoint[0], toState.getX(), controlPoint[1], toState.getY()));
-			return (int) (toState.getY() - (toState.getRadius() + arrowSize / 2) * radiusScale);
+			return (int) (toState.getY() - (toState.getRadius() + arrowSize - 2) * radiusScale);
 		}
 	}
 	
@@ -205,34 +216,46 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		DrawableTransition t = (DrawableTransition) obj;
 		return t.fromState.equals(this.fromState) && t.toState.equals(this.toState) && Arrays.deepEquals(t.inputs.toArray(), this.inputs.toArray());
 	}
-
+	
+	private Polygon getArrowInDeltaPositions() {
+		return getArrowInDeltaPositions(this.getOrientation(), this.getArrowSize());
+	}
+	
+	private Polygon getArrowInDeltaPositions(int arrowSize) {
+		return getArrowInDeltaPositions(this.getOrientation(), arrowSize);
+	}
+	
+	private Polygon getArrowInDeltaPositions(double orientation, int arrowSize) {
+		int[][] coords = MachineCanvas.generateRegularPolygon(3, arrowSize, this.getOrientation());
+		Polygon arrow = new Polygon();
+		for (int[] point : coords) {
+			arrow.addPoint(point[0] + this.getDeltaX1(arrowSize), point[1] + this.getDeltaY1(arrowSize));
+		}
+		return arrow;
+	}
+	
 	@Override
 	public void paint(Graphics2D g2) {
+		if (isInitial)
+			paintInitialArrow(g2);
+		
 		if (!isCurved && !isSelf) {
 			paintStraightArrow(g2);			
 			paintStraightArrowText(g2);
 		} else if (!isCurved && isSelf) {
-			
+			throw new InternalError("Transition cannot be straight and self");
 		} else if (isCurved && !isSelf) {
 			paintCurvedLineArrow(g2);
 		} else {
-			throw new InternalError("Transition cannot be curved and self");
+			//paintSelfLineArrow(g2);
 		}
-	}
-	
-	private Polygon getArrowInDeltaPositions() {
-		return getArrowInDeltaPositions(this.getOrientation());
-	}
-	
-	private Polygon getArrowInDeltaPositions(double orientation) {
-		int[][] coords = MachineCanvas.generateRegularPolygon(3, this.getArrowSize(), this.getOrientation());
-		Polygon arrow = new Polygon();
-		for (int[] point : coords) {
-			arrow.addPoint(point[0] + this.getDeltaX1(), point[1] + this.getDeltaY1());
-		}
-		return arrow;
 	}
 
+	private void paintInitialArrow(Graphics2D g2) {
+		Polygon arrow = getArrowInDeltaPositions(MachineCanvas.INITIAL_ARROW_SIZE);
+		g2.fillPolygon(arrow);
+	}
+	
 	private void paintStraightArrow(Graphics2D g2) {
 		g2.setStroke(new BasicStroke(this.stroke));
 		g2.setColor(this.color);
@@ -258,6 +281,9 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		g2.drawString(getText(), midPoint[0] + xOffset - width / 2, midPoint[1] + yOffset + height / 4);
 	}
 	
+	private void paintSelfLineArrow(Graphics2D g2) {
+		g2.drawRect(this.getDeltaX1(), this.getDeltaY1(), 5, 5);
+	}
 	
 	private void paintCurvedLineArrow(Graphics2D g2) {
 		paintCurvedLine(g2);
@@ -314,6 +340,12 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		int height = g2.getFontMetrics().getHeight();
 		
 		g2.drawString(getText(), xControlPoint - width / 2, yControlPoint + height / 4);
+	}
+	public boolean isInitial() {
+		return isInitial;
+	}
+	public void setInitial(boolean isInitial) {
+		this.isInitial = isInitial;
 	}
 	
 	/*@Override
