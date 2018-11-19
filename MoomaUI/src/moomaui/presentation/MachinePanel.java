@@ -196,12 +196,8 @@ public class MachinePanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			DrawableState st = lblMachineCanvas.getStateInPosition(e.getX(), e.getY());
-			if (st != null) {
-				lblMachineCanvas.setText("Single Click  State: " + st.getText());
+			if (st != null)
 				lblMachineCanvas.setSelectedState(st);
-			} else {
-				lblMachineCanvas.setText("Single Click  " + e.getX() + "  " + e.getY());
-			}
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -277,9 +273,9 @@ public class MachinePanel extends JPanel {
 	private class BtnRemoveInputActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (!lstInputModel.isEmpty()) {
-				IState removedState = lblMachineCanvas.getController().removeInput();
+				IState newCurrentState = lblMachineCanvas.getController().removeInput();
 				lstInputModel.removeElementAt(lstInputModel.getSize() - 1);
-				MachinePanel.this.updateCurrentState(new DrawableState(removedState.getName()));	
+				MachinePanel.this.updateCurrentState(new DrawableState(newCurrentState.getName()));
 				lastPaintedState = null;			
 			}
 			lblMachineCanvas.repaint();

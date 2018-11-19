@@ -29,7 +29,9 @@ public class MachineSimulator {
 	public IState removeInput() {
 		if (!previousStates.isEmpty()) {
 			previousInputs.pop();
-			return previousStates.pop();
+			IState previousState = previousStates.pop();
+			this.currentState = previousState;
+			return previousState;
 		}
 		return null;
 	}
