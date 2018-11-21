@@ -243,7 +243,7 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		} else if (isCurved && !isSelf) {
 			paintCurvedLineArrow(g2);
 		} else {
-			paintSelfLineArrow(g2);
+			paintSelfLine(g2);
 		}
 	}
 
@@ -270,10 +270,6 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		int[] midPoint = MachineCanvas.midPoint(this.getX(), this.getX1(), this.getY(), this.getY1());
 		
 		g2.drawString(getText(), midPoint[0] + xOffset - width / 2, midPoint[1] + yOffset + height / 4);
-	}
-	
-	private void paintSelfLineArrow(Graphics2D g2) {
-		g2.drawRect(this.getDeltaX1(), this.getDeltaY1(), 5, 5);
 	}
 	
 	private void paintCurvedLineArrow(Graphics2D g2) {
@@ -331,6 +327,47 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		int height = g2.getFontMetrics().getHeight();
 		
 		g2.drawString(getText(), xControlPoint - width / 2, yControlPoint + height / 4);
+	}
+	
+	private void paintSelfLine(Graphics2D g2) {
+		g2.setStroke(new BasicStroke(this.stroke));
+		g2.setColor(this.color);
+		
+		int xCircleCenter = this.getX(); //- MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS / 2;
+		int yCircleCenter = this.getY() - MachineCanvas.SELF_TRANSITION_CIRCLE_CENTER_OFFSET; // - MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS / 2;
+		
+		int[][] points = MachineCanvas.getCircleIntersectionPoints(getX(), getY(), this.fromState.getRadius(), getX(), yCircleCenter, MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS);
+
+		xCircleCenter -= MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS;
+		yCircleCenter -= MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS;
+		
+		paintSelfLineArrow(g2, xCircleCenter, yCircleCenter, points);
+		paintSelfLineText(g2, xCircleCenter + MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS, yCircleCenter + MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS);
+	}
+	
+	private void paintSelfLineArrow(Graphics2D g2, int xCircleCenter, int yCircleCenter, int[][] points) {
+		g2.drawOval(xCircleCenter, yCircleCenter, MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS * 2, MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS * 2);
+		
+		double orientation = MachineCanvas.angleBetweenPoints(points[0][0], this.getX(), points[0][1], this.getY()) - Math.PI / 6;
+		
+		int[][] coords = MachineCanvas.generateRegularPolygon(3, arrowSize, orientation);
+		Polygon arrow = new Polygon();
+		for (int[] point : coords) {
+			arrow.addPoint((int) (point[0] + points[0][0] - Math.cos(orientation) * arrowSize / 2 + 2), (int) (point[1] + points[0][1] - Math.sin(orientation) * arrowSize / 2 + 1));
+		}
+		g2.fillPolygon(arrow);
+	}
+	
+	private void paintSelfLineText(Graphics2D g2, int xCircleCenter, int yCircleCenter) {
+		g2.setFont(new Font("Arial", Font.BOLD, fontSize));
+		g2.setColor(this.color);
+		int width = g2.getFontMetrics().stringWidth(getText());
+		int height = g2.getFontMetrics().getHeight();
+		
+		int xTextCenter = xCircleCenter;
+		int yTextCenter = yCircleCenter - MachineCanvas.SELF_TRANSITION_CIRCLE_RADIUS;
+		
+		g2.drawString(getText(), xTextCenter - width / 2, yTextCenter - textFromLineSeparator + height / 4);
 	}
 	
 	/*@Override

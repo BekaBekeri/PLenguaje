@@ -36,6 +36,8 @@ public class MachineCanvas extends JDrawer implements IState{
 	public static final int ARC_LINE_CONTROL_POINT_TEXT_OFFSET = ARC_LINE_CONTROL_POINT_OFFSET - 13;
 	public static final String TRANSITION_SEPARATOR = ", ";
 	public static final int TEXT_FROM_LINE_SEPARATION = 15;
+	public static final int SELF_TRANSITION_CIRCLE_CENTER_OFFSET = 21 * STATE_RADIUS / 20;
+	public static final int SELF_TRANSITION_CIRCLE_RADIUS = 25;
 
 	public static final Color OUTSIDE_CIRCLE_STATE_DEFAULT = Color.BLACK;
 	public static final Color INSIDE_CIRCLE_STATE_DEFAULT = Color.LIGHT_GRAY;
@@ -164,6 +166,53 @@ public class MachineCanvas extends JDrawer implements IState{
 			}
 		}
 		return state;
+	}
+	
+	public static int[][] getCircleIntersectionPoints(int x1, int y1, int r1, int x2, int y2, int r2) {
+		double distanceBetweenCenters = euclideanDistance(x1, x2, y1, y2);
+		
+		// http://www.ambrsoft.com/TrigoCalc/Circles2/circle2intersection/CircleCircleIntersection.htm
+		// If the sum of the radii is greater than the distance between them 
+		// then we have intersection
+		if (r1 + r2 > distanceBetweenCenters) {
+			// Area of the triangle formed by the two centers and one intersection point
+			double areaTriangle = distanceBetweenCenters + r1 + r2;
+			areaTriangle *= distanceBetweenCenters + r1 - r2;
+			areaTriangle *= distanceBetweenCenters - r1 + r2;
+			areaTriangle *= - distanceBetweenCenters + r1 + r2;
+			
+			areaTriangle = Math.sqrt(areaTriangle);
+			areaTriangle /= 4; // Using Heron's formula
+			
+			
+			double intersectionPointX = (double) (x1 + x2) / 2.0;
+			intersectionPointX += ((x2 - x1) * (Math.pow(r1, 2) - Math.pow(r2, 2))) 
+					/ (2 * Math.pow(distanceBetweenCenters, 2));
+
+			double intersectionPointX1 = intersectionPointX + 
+					2 * ((y1 - y2) / Math.pow(distanceBetweenCenters, 2)) * areaTriangle;
+			double intersectionPointX2 = intersectionPointX - 
+					2 * ((y1 - y2) / Math.pow(distanceBetweenCenters, 2)) * areaTriangle;
+			
+			double intersectionPointY = (double) (y1 + y2) / 2.0;
+			intersectionPointY += ((y2 - y1) * (Math.pow(r1, 2) - Math.pow(r2, 2))) 
+					/ (2 * Math.pow(distanceBetweenCenters, 2));
+
+			double intersectionPointY1 = intersectionPointY - 
+					2 * ((x1 - x2) / Math.pow(distanceBetweenCenters, 2)) * areaTriangle;
+			double intersectionPointY2 = intersectionPointY + 
+					2 * ((x1 - x2) / Math.pow(distanceBetweenCenters, 2)) * areaTriangle;
+			
+			int[][] points = new int[2][2];
+			points[0][0] = (int) intersectionPointX1;
+			points[0][1] = (int) intersectionPointY1;
+			points[1][0] = (int) intersectionPointX2;
+			points[1][1] = (int) intersectionPointY2;
+			
+			return points;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
