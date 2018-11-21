@@ -19,7 +19,6 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 	
 	protected boolean isCurved;
 	protected boolean isSelf;
-	private boolean isInitial;
 	protected Color color = Color.BLACK;
 	protected int stroke = MachineCanvas.TRANSITION_STROKE;
 	protected int arrowSize = MachineCanvas.ARROW_SIZE;
@@ -235,10 +234,7 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 	}
 	
 	@Override
-	public void paint(Graphics2D g2) {
-		if (isInitial)
-			paintInitialArrow(g2);
-		
+	public void paint(Graphics2D g2) {		
 		if (!isCurved && !isSelf) {
 			paintStraightArrow(g2);			
 			paintStraightArrowText(g2);
@@ -247,15 +243,10 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		} else if (isCurved && !isSelf) {
 			paintCurvedLineArrow(g2);
 		} else {
-			//paintSelfLineArrow(g2);
+			paintSelfLineArrow(g2);
 		}
 	}
 
-	private void paintInitialArrow(Graphics2D g2) {
-		Polygon arrow = getArrowInDeltaPositions(MachineCanvas.INITIAL_ARROW_SIZE);
-		g2.fillPolygon(arrow);
-	}
-	
 	private void paintStraightArrow(Graphics2D g2) {
 		g2.setStroke(new BasicStroke(this.stroke));
 		g2.setColor(this.color);
@@ -340,12 +331,6 @@ public class DrawableTransition implements ArcArrowLineObject, TextObject {
 		int height = g2.getFontMetrics().getHeight();
 		
 		g2.drawString(getText(), xControlPoint - width / 2, yControlPoint + height / 4);
-	}
-	public boolean isInitial() {
-		return isInitial;
-	}
-	public void setInitial(boolean isInitial) {
-		this.isInitial = isInitial;
 	}
 	
 	/*@Override

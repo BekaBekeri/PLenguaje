@@ -3,12 +3,14 @@ package moomaui.presentation.drawing;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 
 import moomaui.presentation.MachineCanvas;
 
 public class DrawableState implements BevelCircleObject, TextObject {
 	private String name;
-	
+	private boolean isInitial;
+
 	private int x;
 	private int y;
 	private Color color = MachineCanvas.OUTSIDE_CIRCLE_STATE_DEFAULT;
@@ -41,6 +43,14 @@ public class DrawableState implements BevelCircleObject, TextObject {
 	@Override
 	public int getY() {
 		return this.y;
+	}
+	
+	public boolean isInitial() {
+		return isInitial;
+	}
+
+	public void setInitial(boolean isInitial) {
+		this.isInitial = isInitial;
 	}
 
 	@Override
@@ -105,8 +115,12 @@ public class DrawableState implements BevelCircleObject, TextObject {
 
 	@Override
 	public void paint(Graphics2D g2) {
+		if (isInitial)
+			paintInitialArrow(g2);
+		
 		paintCircles(g2);
 		paintText(g2);
+		
 	}
 	
 	private void paintCircles(Graphics2D g2) {		
@@ -124,6 +138,15 @@ public class DrawableState implements BevelCircleObject, TextObject {
 		
 		g2.setColor(color);
 		g2.drawString(name, x - width / 2, y + height / 4);
+	}
+	
+	private void paintInitialArrow(Graphics2D g2) {
+		int[][] coords = MachineCanvas.generateRegularPolygon(3, MachineCanvas.INITIAL_ARROW_SIZE, 0);
+		Polygon arrow = new Polygon();
+		for (int[] point : coords) {
+			arrow.addPoint(point[0] + this.getX() - this.getRadius() - MachineCanvas.INITIAL_ARROW_SIZE + 1, point[1] + this.getY());
+		}
+		g2.fillPolygon(arrow);
 	}
 
 	public void setCoords(int x, int y) {

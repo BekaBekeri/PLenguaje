@@ -33,7 +33,7 @@ public class MachineCanvas extends JDrawer implements IState{
 	public static final int INITIAL_ARROW_SIZE = 11;
 	public static final int MACHINE_DEFAULT_RADIUS = 130;
 	public static final int ARC_LINE_CONTROL_POINT_OFFSET = 75;
-	public static final int ARC_LINE_CONTROL_POINT_TEXT_OFFSET = 62;
+	public static final int ARC_LINE_CONTROL_POINT_TEXT_OFFSET = ARC_LINE_CONTROL_POINT_OFFSET - 13;
 	public static final String TRANSITION_SEPARATOR = ", ";
 	public static final int TEXT_FROM_LINE_SEPARATION = 15;
 
@@ -50,8 +50,10 @@ public class MachineCanvas extends JDrawer implements IState{
 			states.add(newState);
 			this.addGraphicObject(newState);
 			
-			if (state.equals(controller.getInitialState())) 
+			if (state.equals(controller.getInitialState())) {
 				this.initialState = newState;
+				newState.setInitial(true);
+			}
 		}
 		for (ITransition transition : controller.getTransitions()) {
 			DrawableState fromState = states.get(states.indexOf(new DrawableState(transition.getFromState().getName())));
@@ -100,10 +102,9 @@ public class MachineCanvas extends JDrawer implements IState{
 		for (DrawableTransition t1 : transitions) {
 			for (DrawableTransition t2 : transitions) {
 				if (t1.getFromState().equals(t1.getToState())) {
-					/*if (t1.getFromState().equals(initialState))
-						t1.setInitial(true);*/						
+					continue;
 				} 
-				else if (t1.getFromState().equals(t2.getToState()) && t1.getToState().equals(t2.getFromState())) {
+				if (t1.getFromState().equals(t2.getToState()) && t1.getToState().equals(t2.getFromState())) {
 					t1.setIsCurved(true);
 					t2.setIsCurved(true);
 				}
