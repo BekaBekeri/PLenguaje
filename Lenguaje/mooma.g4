@@ -68,6 +68,10 @@ fragment D
 fragment F
   : 'F' | 'f'
   ;
+  
+fragment V
+  : 'V' | 'v'
+  ;
  
 /*
  * Symbols
@@ -141,9 +145,18 @@ Def
   : D E F I N E
   ;
   
+Env
+  : E N V I R O N M E N T
+  ;
+  
 /*
  * Generic tokens
  */
+
+Clase
+  : Letra+ ('.' Letra+)*
+  ;
+ 
 Ident
   : Letra (Letra | Digito)*
   ;
@@ -173,8 +186,12 @@ WS : [ \r\t\n]+ -> skip ;
  */
 
 program
-  : l_output l_define l_automaton
+  : environment l_output l_define l_automaton
   ;
+  
+environment
+  : Env Asignacion Clase Punto_y_coma
+  | ;
 
 l_output
   : output l_output

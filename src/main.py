@@ -3,6 +3,7 @@ from antlr4 import *
 from moomaLexer import moomaLexer
 from moomaParser import moomaParser
 from moomaListener import moomaListener
+from moomaErrorListener import moomaErrorListener
 
 
 class KeyPrinter(moomaListener):
@@ -23,10 +24,15 @@ class KeyPrinter(moomaListener):
 
 
 def main(argv):
-    input = FileStream("Lenguaje/test2.moo")
+    input = FileStream("test2.moo")
+
+    errorListener = moomaErrorListener()
+
     lexer = moomaLexer(input)
     stream = CommonTokenStream(lexer)
     parser = moomaParser(stream)
+    parser.removeErrorListeners()
+    parser.addErrorListener(errorListener)
     tree = parser.program()
     printer = KeyPrinter()
     walker = ParseTreeWalker()

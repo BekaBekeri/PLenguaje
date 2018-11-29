@@ -1,9 +1,11 @@
+environment := paquete.clase;
+
 code1 := {: 
-        System.out.println("Hello");
+        printear("Hello");
         :};
 code2 := /* HOLA \asd <> -.*/{:
         /* ADIOS \asd <> -.* */
-        System.out.println("Goodbye");
+        printear("Adios");
         :};
 
 

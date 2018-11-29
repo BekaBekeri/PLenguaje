@@ -1,4 +1,4 @@
-# Generated from .\Lenguaje\mooma.g4 by ANTLR 4.7.1
+# Generated from .\src\mooma.g4 by ANTLR 4.7.1
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .moomaParser import moomaParser
@@ -14,6 +14,15 @@ class moomaListener(ParseTreeListener):
 
     # Exit a parse tree produced by moomaParser#program.
     def exitProgram(self, ctx:moomaParser.ProgramContext):
+        pass
+
+
+    # Enter a parse tree produced by moomaParser#environment.
+    def enterEnvironment(self, ctx:moomaParser.EnvironmentContext):
+        pass
+
+    # Exit a parse tree produced by moomaParser#environment.
+    def exitEnvironment(self, ctx:moomaParser.EnvironmentContext):
         pass
 
 
@@ -71,15 +80,6 @@ class moomaListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by moomaParser#l_automaton.
-    def enterL_automaton(self, ctx:moomaParser.L_automatonContext):
-        pass
-
-    # Exit a parse tree produced by moomaParser#l_automaton.
-    def exitL_automaton(self, ctx:moomaParser.L_automatonContext):
-        pass
-
-
     # Enter a parse tree produced by moomaParser#l_evento.
     def enterL_evento(self, ctx:moomaParser.L_eventoContext):
         pass
@@ -98,15 +98,6 @@ class moomaListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by moomaParser#automaton.
-    def enterAutomaton(self, ctx:moomaParser.AutomatonContext):
-        pass
-
-    # Exit a parse tree produced by moomaParser#automaton.
-    def exitAutomaton(self, ctx:moomaParser.AutomatonContext):
-        pass
-
-
     # Enter a parse tree produced by moomaParser#l_ident.
     def enterL_ident(self, ctx:moomaParser.L_identContext):
         pass
@@ -122,6 +113,24 @@ class moomaListener(ParseTreeListener):
 
     # Exit a parse tree produced by moomaParser#l_ident_fact.
     def exitL_ident_fact(self, ctx:moomaParser.L_ident_factContext):
+        pass
+
+
+    # Enter a parse tree produced by moomaParser#l_automaton.
+    def enterL_automaton(self, ctx:moomaParser.L_automatonContext):
+        pass
+
+    # Exit a parse tree produced by moomaParser#l_automaton.
+    def exitL_automaton(self, ctx:moomaParser.L_automatonContext):
+        pass
+
+
+    # Enter a parse tree produced by moomaParser#automaton.
+    def enterAutomaton(self, ctx:moomaParser.AutomatonContext):
+        pass
+
+    # Exit a parse tree produced by moomaParser#automaton.
+    def exitAutomaton(self, ctx:moomaParser.AutomatonContext):
         pass
 
 
