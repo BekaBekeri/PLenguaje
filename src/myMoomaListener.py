@@ -36,6 +36,7 @@ class Automaton:
         self.initial = None
 
     def addinitial(self, state):
+        # Initial should be a state of the automaton
         if state in self.states:
             self.initial = state
 
@@ -47,7 +48,7 @@ class Automaton:
         for x, y in self.states.items():
             retval += "{}:{}\t".format(x, y)
         retval += "\nInitial: {}".format(self.initial)
-        retval += "\nLanguage: {}".format(self.language)
+        retval += "\nLanguage: {}".format(self.language.ident)
         retval += "\nTransitions:\n"
         for x in self.transitions:
             retval += "\t{}\n".format(str(x))
@@ -88,7 +89,8 @@ class MyMoomaListener(moomaListener):
             print("{}: {}".format(key, value))
         print("\n\n\nEnv: {}\nError: {}".format(self.env, self.error))
 
-        self.file.write("import {};".format(self.env))
+        if not self.error:
+            self.file.write("import {};".format(self.env))
 
 
     def enterEnvironment(self, ctx:moomaParser.EnvironmentContext):
@@ -113,14 +115,22 @@ class MyMoomaListener(moomaListener):
         lang = self.languages[-1]
         events = ctx.l_evento().getText().split(",")
         for event in events:
-            lang.inputs.append(event)
+            # Check for no repeated events
+            if event not in lang.inputs:
+                lang.inputs.append(event)
+            else:
+                self.error = True
 
     def enterSalida(self, ctx:moomaParser.SalidaContext):
         # The language this goes in is the last one seen due to the way we traverse the tree
         lang = self.languages[-1]
         idents = ctx.l_ident().getText().split(",")
         for ident in idents:
-            lang.outputs.append(ident)
+            # Check for no repeated idents
+            if ident not in lang.outputs:
+                lang.outputs.append(ident)
+            else:
+                self.error = True
 
     def enterAutomaton(self, ctx:moomaParser.AutomatonContext):
         # Check if this automaton identier has already been defined
@@ -132,7 +142,9 @@ class MyMoomaListener(moomaListener):
             if str(ctx.Ident(1)) not in self.languages:
                 self.error = True
             else:
-                self.automatons.append(Automaton(ctx.Ident(0), ctx.Ident(1)))
+                language = self.languages[self.languages.index(str(ctx.Ident(1)))]
+                self.automatons.append(Automaton(ctx.Ident(0), language))
+
 
     def enterStates(self, ctx:moomaParser.StatesContext):
         # The automaton this goes in is the last one seen due to the way we traverse the tree
@@ -140,14 +152,25 @@ class MyMoomaListener(moomaListener):
         states = ctx.l_states().getText().split(",")
 
         for state in states:
-            state_splitted = state.split("|")
-            automaton.states[str(state_splitted[0])] = str(state_splitted[1])
+            state_ident = state.split("|")[0]
+            state_out = state.split("|")[1]
+
+            # Check for no repeated states
+            if state_ident in automaton.states:
+                self.error = True
+            else:
+                # Check if output is in language
+                if state_out not in automaton.language.outputs:
+                    self.error = True
+                else:
+                    automaton.states[state_ident] = state_out
 
     def enterInitial(self, ctx:moomaParser.InitialContext):
         # The automaton this goes in is the last one seen due to the way we traverse the tree
         automaton = self.automatons[-1]
         automaton.addinitial(str(ctx.Ident()))
 
+        # Check if initial was correctly added
         if automaton.initial is None:
             self.error = True
 
@@ -160,7 +183,15 @@ class MyMoomaListener(moomaListener):
             event = trans.split("|")[1].split("->")[0]
             dest = trans.split("|")[1].split("->")[1]
 
-            automaton.transitions.append(Transition(origin, event, dest))
+            # Check if origin and dest are actual states of the automaton
+            if origin not in automaton.states or dest not in automaton.states:
+                self.error = True
+            else:
+                # Check if input is part of language
+                if event not in automaton.language.inputs:
+                    self.error = True
+                else:
+                    automaton.transitions.append(Transition(origin, event, dest))
 
     def visitErrorNode(self, node:ErrorNode):
         self.error = True

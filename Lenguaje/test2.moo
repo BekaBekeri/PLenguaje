@@ -1,3 +1,9 @@
+/* 
+Test basico con un lenguaje y un automata
+Falta un ; en linea 18
+
+*/
+
 code1 := {: 
         System.out.println("Hello");
         :};

@@ -1,6 +1,6 @@
 /* 
 Test basico con un lenguaje y un automata
-Sin Fallos
+Una de las transiciones tiene un estado que no existe en el automata
 
 */
 
@@ -26,8 +26,7 @@ automaton auto1 (alfabetos1){
     transitions{
         q0|1 -> q1;
         q0|2 -> q0;
-        q1|1 -> q1;
+        q1|1 -> q3;
         q1|2 -> q0;
     }
 }
-

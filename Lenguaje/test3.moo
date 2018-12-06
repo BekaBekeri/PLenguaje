@@ -1,3 +1,9 @@
+/* 
+Test con 2 lenguajes y tres automatas
+Sin Fallos
+
+*/
+
 environment := Domain.Env;
 
 code1 := {: 
@@ -33,6 +39,7 @@ automaton auto1 (alfabetos1){
 }
 
 automaton auto2 (alfabetos1){
+    /* Comentario random sobre este automata */
     states := estate1|code1, estate2|code2, estate3|code2;
     initial := estate1;
     transitions{

@@ -22,7 +22,7 @@
 hs_err_pid*
 
 \.idea/
-\__pychache/
+\__pychache__/
 
 # LaTeX stuff
 *.aux
