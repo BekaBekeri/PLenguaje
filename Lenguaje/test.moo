@@ -1,4 +1,4 @@
-environment := paquete.clase;
+environment := Domain.Env;
 
 code1 := {: 
         printear("Hello");
@@ -14,7 +14,7 @@ define alfabetos1{
     out := code1, code2;
 }
 
-automaton cosa1 (alfabetos1){
+automaton auto1 (alfabetos1){
     states := q0|code1, q1|code2;
     initial := q0;
     transitions{

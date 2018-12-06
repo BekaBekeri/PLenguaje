@@ -3,6 +3,7 @@ from antlr4 import *
 from moomaLexer import moomaLexer
 from moomaParser import moomaParser
 from moomaListener import moomaListener
+from myMoomaListener import MyMoomaListener
 from moomaErrorListener import moomaErrorListener
 
 
@@ -24,7 +25,7 @@ class KeyPrinter(moomaListener):
 
 
 def main(argv):
-    input = FileStream("test2.moo")
+    input = FileStream("../Lenguaje/test3.moo")
 
     errorListener = moomaErrorListener()
 
@@ -34,9 +35,9 @@ def main(argv):
     parser.removeErrorListeners()
     parser.addErrorListener(errorListener)
     tree = parser.program()
-    printer = KeyPrinter()
+    listener = MyMoomaListener("out.java")
     walker = ParseTreeWalker()
-    walker.walk(printer, tree)
+    walker.walk(listener, tree)
 
 
 if __name__ == "__main__":
