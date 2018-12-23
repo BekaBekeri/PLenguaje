@@ -13,7 +13,7 @@ import moomaui.presentation.drawing.DrawableState;
 import moomaui.presentation.drawing.DrawableTransition;
 import moomaui.presentation.drawing.JDrawer;
 
-public class MachineCanvas extends JDrawer implements IState{
+public class MachineCanvas extends JDrawer{
 	private static final long serialVersionUID = 1L;
 	private MachineController<String> controller;
 	private DrawableState selectedState = null;
@@ -213,17 +213,5 @@ public class MachineCanvas extends JDrawer implements IState{
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public OutputInterface getOutput() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setOutput(OutputInterface output) {
-		// TODO Auto-generated method stub
-		
 	}
 }
