@@ -4,10 +4,11 @@ from moomaLexer import moomaLexer
 from moomaParser import moomaParser
 from myMoomaListener import MyMoomaListener
 from moomaErrorListener import moomaErrorListener
+from argparse import ArgumentParser
 
 
-def main(argv):
-    file = FileStream(sys.argv[1])
+def main(args):
+    file = FileStream(args.input_file)
 
     errorListener = moomaErrorListener()
 
@@ -20,8 +21,19 @@ def main(argv):
     listener = MyMoomaListener("out.java")
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
+    print("adios")
+    #write(data)
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    parser = ArgumentParser("Mooma Parser")
+    parser.add_argument(
+        "input_file",
+        help="Mooma specification file to load."
+    )
+    parser.add_argument(
+        "-o", "--output", default=".",
+        help="<directory> Specify where to place generated files"
+    )
+    main(parser.parse_args())
 
