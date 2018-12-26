@@ -1,26 +1,24 @@
 /* 
 Test basico con un lenguaje y un automata
-Sin Fallos
+Falta un ; en linea 18
 
 */
 
-environment := Domain.Env;
-
 code1 := {: 
-        printear("Hello");
+        System.out.println("Hello");
         :};
 code2 := /* HOLA \asd <> -.*/{:
         /* ADIOS \asd <> -.* */
-        printear("Adios");
+        System.out.println("Goodbye");
         :};
 
 
 define alfabetos1{
     in := 1, 2;
-    out := code1, code2;
+    out := code1, code2
 }
 
-automaton auto1 (alfabetos1){
+automaton cosa1 (alfabetos1){
     states := q0|code1, q1|code2;
     initial := q0;
     transitions{

@@ -1,0 +1,60 @@
+PROGRAM         -> L_OUTPUT L_DEFINE L_AUTOMATON
+L_OUTPUT        -> OUTPUT L_OUTPUT 
+                    | epsilon
+OUTPUT          -> IDENT ASIGNACION CODIGO PUNTO_Y_COMA
+L_DEFINE        -> DEFINE L_DEFINE 
+                    | epsilon
+DEFINE          -> DEF IDENT LLAVE_IZQUIERDA ENTRADA SALIDA LLAVE_DERECHA
+ENTRADA         -> IN ASIGNACION L_EVENTO PUNTO_Y_COMA
+SALIDA          -> OUT ASIGNACION L_IDENT PUNTO_Y_COMA
+L_EVENTO        -> EVENTO L_EVENTO_FACT 
+L_EVENTO_FACT   -> COMA L_EVENTO 
+                    | epsilon
+L_IDENT         -> IDENT L_IDENT_FACT
+L_IDENT_FACT    -> COMA L_IDENT 
+                    | epsilon
+L_AUTOMATON     -> AUTOMATON L_AUTOMATON 
+                    | epsilon
+AUTOMATON       -> AUTO IDENT PAR_IZQUIERDO IDENT PAR_DERECHO LLAVE_IZQUIERDA 
+                    STATES INITIAL TRANSITIONS LLAVE_DERECHA
+STATES          -> STA ASIGNACION L_STATES PUNTO_Y_COMA
+L_STATES        -> IDENT SEPARATOR IDENT L_STATES_FACT
+L_STATES_FACT   -> COMA L_STATES 
+                    | epsilon
+INITIAL         -> INI ASIGNACION IDENT PUNTO_Y_COMA
+TRANSITIONS     -> TRANS LLAVE_IZQUIERDA L_TRANSITIONS LLAVE_DERECHA
+L_TRANSITIONS   -> IDENT SEPARATOR L_EVENTO FLECHA IDENT PUNTO_Y_COMA L_TRANSITIONS 
+                    | epsilon
+IDENT           -> LETRA IDENT_C
+IDENT_C         -> LETRA IDENT_C 
+                    | DIGITO IDENT_C
+EVENTO          -> NONZERO DIGITO_C
+DIGITO_C        -> DIGITO DIGITO_C
+CODIGO          -> '{:' 'cualquiercosa' ':}'
+COMENTARIO      -> '/*' 'cualquiercosa' '*/'
+NONZERO         -> '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+DIGITO          -> '0' |'1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+LETRA           -> 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G'
+                       | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N'
+                       | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U'
+                       | 'V' | 'W' | 'X' | 'Y' | 'Z' | 'a' | 'b'
+                       | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i'
+                       | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p'
+                       | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w'
+                       | 'x' | 'y' | 'z'
+FLECHA          -> '->'
+SEPARATOR       -> '|'
+PAR_IZQUIERDO   -> '('
+PAR_DERECHO     -> ')'
+LLAVE_IZQUIERDA -> '{'
+LLAVE_DERECHA   -> '}'
+PUNTO_Y_COMA    -> ';'
+ASIGNACION      -> ':='
+COMA            -> ','
+AUTO            -> 'automaton'
+IN              -> 'in'
+OUT             -> 'out'
+TRANS           -> 'transitions'
+INI             -> 'initial'
+STA             -> 'states'
+DEF             -> 'define'
