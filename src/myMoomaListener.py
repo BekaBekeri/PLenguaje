@@ -96,7 +96,20 @@ class MyMoomaListener(moomaListener):
                 sys.stderr.write("{}\n".format(error))
 
         else:
-            self.file.write("import {};".format(self.env))
+            if not(self.env is None):
+                self.file.write("import {};\n\n".format(self.env))
+            self.file.write("public class Machines {\n")
+            for auto in self.automatons:
+                self.file.write("\tpublic static IMooreMachine {0}(){{\n\t\tMooreMachine machine = new MooreMachine();\n\t\tmachine.setMachineName(\"{0}\");".format(auto.ident))
+                for key, value in auto.states.items():
+                    self.file.write("\n\t\tState {0} = new State(\"{0}\");\n\t\t{0}.setOutput(() -> {1});\n\t\tmachine.addState({0});".format(key,self.outputs[value].replace("\n","\n\t\t")))
+                tranCount = 0
+                for transition in auto.transitions:
+                    tranCount+=1
+                    self.file.write("\n\t\tTransition t{0} = new Transition ({1},\"{2}\",{3});\n\t\tmachine.addTransition(t{0});".format(tranCount,transition.origin,transition.event,transition.dest))
+                self.file.write("\n\t\tmachine.setInitialState({0});".format(auto.initial))
+                self.file.write("\n\t\treturn machine;\n\t}")
+            self.file.write("\n}")
 
 
     def enterEnvironment(self, ctx:moomaParser.EnvironmentContext):
@@ -108,7 +121,7 @@ class MyMoomaListener(moomaListener):
             self.error = True
             self.errorLog.append("Identificador de código ya definido: {}".format(str(ctx.Ident())))
         else:
-            self.outputs[ctx.Ident()] = str(ctx.Codigo())[2:-2]
+            self.outputs[str(ctx.Ident())] = str(ctx.Codigo())[2:-2]
 
     def enterDefine(self, ctx:moomaParser.DefineContext):
         # Check if a language identifier has already been defined

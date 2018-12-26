@@ -1,4 +1,5 @@
 import sys
+import os
 from antlr4 import *
 from moomaLexer import moomaLexer
 from moomaParser import moomaParser
@@ -18,7 +19,14 @@ def main(args):
     parser.removeErrorListeners()
     parser.addErrorListener(errorListener)
     tree = parser.program()
-    listener = MyMoomaListener("out.java")
+    if not(os.path.isdir(args.output)):
+        sys.stderr.write("\'{}\' is not a directory.\n".format(args.output))
+        sys.exit()
+    else:
+        if args.output[len(args.output)-1] != "/":
+            listener = MyMoomaListener("{0}/out.java".format(args.output))
+        else:
+            listener = MyMoomaListener("{0}out.java".format(args.output))
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
     print("adios")
@@ -36,4 +44,3 @@ if __name__ == "__main__":
         help="<directory> Specify where to place generated files"
     )
     main(parser.parse_args())
-
