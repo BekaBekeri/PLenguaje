@@ -1,4 +1,4 @@
-public class Environment<T> implements IEnvironment<T> {
+public class Env<T> implements IEnvironment<T> {
 
 	@Override
 	public String translate(T input) {

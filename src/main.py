@@ -24,12 +24,11 @@ def main(args):
         sys.exit()
     else:
         if args.output[len(args.output)-1] != "/":
-            listener = MyMoomaListener("out.java",args.output+"/")
+            listener = MyMoomaListener(args.output+"/")
         else:
-            listener = MyMoomaListener("out.java",args.output)
+            listener = MyMoomaListener(args.output)
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
-    print("adios")
     #write(data)
 
 
