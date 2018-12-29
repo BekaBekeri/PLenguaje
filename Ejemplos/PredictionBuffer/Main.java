@@ -2,18 +2,19 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        MachineSimulator ms = new MachineSimulator(Machines.automata1());
+        MachineController mc = new MachineController(Machines.automata1());
 
 
         System.out.print("Input: ");
         String input = sc.nextLine();
 
         while(!input.equals("")){
-            if (!ms.addNewInput(input)){
-                System.err.println("Evento no reconocido por el lenguaje");
+            if (mc.addNewInput(input) != null){
+                mc.getCurrentState().getOutput().run();
             }
-            ms.getCurrentState().getOutput().run();
-
+            else{
+                System.out.println("Entrada no reconocida por el automata");
+            }
             System.out.print("Input: ");
             input = sc.nextLine();
         }
