@@ -5,12 +5,13 @@ import java.util.LinkedList;
 public class MachineController<T> {
 	private IMooreMachine machine;
 	private MachineSimulator simulator;
-	private GenericEnvironment<T> environment;
+	private VendingEnvironment environment;
 	
 	public MachineController(IMooreMachine machine) {
 		this.machine = machine;
+		this.environment = new VendingEnvironment();
 		this.simulator = new MachineSimulator(machine);
-		this.environment = new GenericEnvironment<T>();
+		this.simulator.setObservers(this.environment.getNotifiers());
 	}
 	
 	public LinkedList<IState> getStates() {
@@ -31,11 +32,15 @@ public class MachineController<T> {
 	}
 	
 	public IState addNewInput(T input) {		
-		boolean transitioned = simulator.addNewInput(environment.translate(input));
+		boolean transitioned = simulator.addNewInput(environment.translate((String) input));
 		if (transitioned)
 			return simulator.getCurrentState();
 		else
 			return null;
+	}
+	
+	public String translate(String input) {
+		return environment.translate(input);
 	}
 	
 	public IState removeInput() {
