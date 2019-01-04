@@ -146,7 +146,8 @@ public class MachinePanel extends JPanel {
 		pnlMachine.add(lblMachineCanvas, BorderLayout.CENTER);
 		lblMachineCanvas.addMouseMotionListener(new CanvasMouseMotionListener());
 		lblMachineCanvas.addMouseListener(new CanvasMouseListener());
-		//simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
+		
+		lblMachineCanvas.getController().getCurrentState().getOutput().accept(lblMachineCanvas.getController().getEnvironment());
 	}
 	
 	public MachineCanvas getMachineCanvas() {
@@ -169,7 +170,8 @@ public class MachinePanel extends JPanel {
 	
 	public void updateCandidateState(String input) {
 		IState currentState = lblMachineCanvas.getController().getCurrentState();
-		IState destination = lblMachineCanvas.getController().getTransitionDestination(currentState.getName(), input);
+		IState destination = lblMachineCanvas.getController().getTransitionDestination(
+				currentState.getName(), lblMachineCanvas.getController().translate(input));
 		
 		if (destination != null) {
 			for (DrawableState state : lblMachineCanvas.getStates()) {
@@ -239,18 +241,9 @@ public class MachinePanel extends JPanel {
 		}
 		
 		public void changed(DocumentEvent e) {
-			resetState();
-			String[] inputs = txtInput.getText().split(" ");
-			
-			if (txtInput.getText().length() > 0 & inputs.length > 0) {				
-				if (inputs.length != 0) {
-					String input = inputs[inputs.length - 1];
-					if (Character.isDigit(txtInput.getText().charAt(txtInput.getText().length() - 1))) {
-							updateCandidateState(input);
-					} else {
-						// Error
-					}
-				}
+			resetState();			
+			if (txtInput.getText().length() > 0) {
+				updateCandidateState(txtInput.getText());
 			}
 			lblMachineCanvas.repaint();
 		}		
@@ -262,7 +255,7 @@ public class MachinePanel extends JPanel {
 				lstInputModel.addElement(String.format("%s,%s -> %s", lblMachineCanvas.getController().getPreviousState().getName(), txtInput.getText().trim(), nextState.getName()));
 				MachinePanel.this.updateCurrentState(new DrawableState(nextState.getName()));
 				lastPaintedState = null;
-				nextState.getOutput().run();
+				nextState.getOutput().accept(lblMachineCanvas.getController().getEnvironment());
 				
 				txtInput.setText("");
 			} else {

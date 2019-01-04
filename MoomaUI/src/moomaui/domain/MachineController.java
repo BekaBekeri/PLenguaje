@@ -2,15 +2,15 @@ package moomaui.domain;
 
 import java.util.LinkedList;
 
-public class MachineController<T> {
+public class MachineController {
 	private IMooreMachine machine;
 	private MachineSimulator simulator;
-	private GenericEnvironment<T> environment;
+	private IEnvironment environment;
 	
 	public MachineController(IMooreMachine machine) {
 		this.machine = machine;
+		this.environment = new VendingEnvironment();
 		this.simulator = new MachineSimulator(machine);
-		this.environment = new GenericEnvironment<T>();
 	}
 	
 	public LinkedList<IState> getStates() {
@@ -19,6 +19,10 @@ public class MachineController<T> {
 	
 	public LinkedList<ITransition> getTransitions() {
 		return machine.getTransitions();
+	}
+	
+	public IEnvironment getEnvironment() {
+		return environment;
 	}
 	
 	public IState getInitialState() {
@@ -30,12 +34,16 @@ public class MachineController<T> {
 		return machine.getDestinationState(originState, input);
 	}
 	
-	public IState addNewInput(T input) {		
+	public IState addNewInput(Object input) {		
 		boolean transitioned = simulator.addNewInput(environment.translate(input));
 		if (transitioned)
 			return simulator.getCurrentState();
 		else
 			return null;
+	}
+	
+	public String translate(String input) {
+		return environment.translate(input);
 	}
 	
 	public IState removeInput() {

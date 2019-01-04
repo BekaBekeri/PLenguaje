@@ -1,16 +1,24 @@
 package moomaui.domain;
 
+import java.util.HashMap;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 public class MachineSimulator {
 	private IMooreMachine machine;
 	private IState currentState;
 	private Stack<IState> previousStates = new Stack<>();
 	private Stack<String> previousInputs = new Stack<>();
+	private HashMap<String, Consumer<String>> observers;
 		
 	public MachineSimulator(IMooreMachine machine) {
 		this.setMachine(machine);
 		this.currentState = this.machine.getInitialState();
+		observers = new HashMap<>();
+	}
+	
+	public void setObservers(HashMap<String, Consumer<String>> observers) {
+		this.observers = observers;
 	}
 	
 	public boolean addNewInput(String input) {
@@ -18,11 +26,15 @@ public class MachineSimulator {
 		if (destinationState == null) {
 			return false;
 		}
+
+		if (observers != null && observers.containsKey(input)) {
+			observers.get(input).accept(currentState.getName());
+		}
 		
 		previousStates.push(currentState);
 		previousInputs.push(input);
 		setCurrentState(destinationState);
-		//getCurrentState().getOutput().run();
+		
 		return true;
 	}
 	
