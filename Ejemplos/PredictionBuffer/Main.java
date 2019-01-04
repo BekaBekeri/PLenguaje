@@ -10,7 +10,7 @@ public class Main {
 
         while(!input.equals("")){
             if (mc.addNewInput(input) != null){
-                mc.getCurrentState().getOutput().run();
+                mc.getCurrentState().getOutput().accept(mc.getEnvironment());
             }
             else{
                 System.out.println("Entrada no reconocida por el automata");

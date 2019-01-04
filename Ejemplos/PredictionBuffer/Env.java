@@ -1,7 +1,7 @@
-public class Env<T> implements IEnvironment<T> {
+public class Env implements IEnvironment {
 
 	@Override
-	public String translate(T input) {
+	public String translate(Object input) {
         if (input.toString().equals("Taken")){
             return "2";
         }

@@ -47,10 +47,10 @@ def write_machines(listener):
     for auto in listener.automatons:
         listener.file.write("\tpublic static IMooreMachine {0}(){{\n\t\tMooreMachine machine = new MooreMachine();\n\t\tmachine.setMachineName(\"{0}\");".format(auto.ident))
         for key, value in auto.states.items():
-            listener.file.write("\n\t\tState {0} = new State(\"{0}\");\n\t\t{0}.setOutput(() -> {1});\n\t\tmachine.addState({0});".format(key, listener.outputs[value].replace("\n", "").replace("\r", "").replace(" ", "")))
+            listener.file.write("\n\t\tState {0} = new State(\"{0}\");\n\t\t{0}.setOutput(({2} env) -> {1});\n\t\tmachine.addState({0});".format(key, listener.outputs[value].replace("\n", "").replace("\r", "").replace(" ", ""), listener.env))
         tranCount = 0
         for transition in auto.transitions:
-            tranCount+=1
+            tranCount += 1
             listener.file.write("\n\t\tTransition t{0} = new Transition ({1},{2},\"{3}\");\n\t\tmachine.addTransition(t{0});".format(tranCount, transition.origin, transition.dest, transition.event))
         listener.file.write("\n\t\tmachine.setInitialState({0});".format(auto.initial))
         listener.file.write("\n\t\treturn machine;\n\t}")
