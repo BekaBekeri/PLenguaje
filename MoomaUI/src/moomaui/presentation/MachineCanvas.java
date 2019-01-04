@@ -15,7 +15,7 @@ import moomaui.presentation.drawing.JDrawer;
 
 public class MachineCanvas extends JDrawer{
 	private static final long serialVersionUID = 1L;
-	private MachineController<String> controller;
+	private MachineController controller;
 	private DrawableState selectedState = null;
 	private boolean isInitialized = false; // Indicates whether the state positions are initialized
 
@@ -31,7 +31,7 @@ public class MachineCanvas extends JDrawer{
 	public static final int FONT_SIZE = 15;
 	public static final int ARROW_SIZE = 7;
 	public static final int INITIAL_ARROW_SIZE = 11;
-	public static final int MACHINE_DEFAULT_RADIUS = 130;
+	public static final int MACHINE_DEFAULT_RADIUS = 200;
 	public static final int ARC_LINE_CONTROL_POINT_OFFSET = 75;
 	public static final int ARC_LINE_CONTROL_POINT_TEXT_OFFSET = ARC_LINE_CONTROL_POINT_OFFSET - 13;
 	public static final String TRANSITION_SEPARATOR = ", ";
@@ -44,7 +44,7 @@ public class MachineCanvas extends JDrawer{
 	public static final Color INSIDE_CIRCLE_STATE_SELECTED = Color.GREEN;
 	public static final Color INSIDE_CIRCLE_STATE_CANDIDATE = Color.CYAN;
 	
-	public MachineCanvas(MachineController<String> controller) {
+	public MachineCanvas(MachineController controller) {
 		this.controller = controller;
 		
 		for (IState state : controller.getStates()) {
@@ -72,7 +72,6 @@ public class MachineCanvas extends JDrawer{
 			initializePositions();
 			initializeStates();
 			initializeTransitions();
-			controller.getCurrentState().getOutput().run();
 			isInitialized = true;
 		}
 		
@@ -122,7 +121,7 @@ public class MachineCanvas extends JDrawer{
 		this.currentState = currentState;
 	}
 	
-	public MachineController<String> getController() {
+	public MachineController getController() {
 		return this.controller;
 	}
 

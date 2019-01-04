@@ -1,6 +1,5 @@
 package moomaui.domain;
 
-// This class is used only for semantic purposes 
-// (Functional Interface that accepts nothing and returns nothing)
+import java.util.function.Consumer;
 @FunctionalInterface
-public interface OutputInterface extends Runnable {}
+public interface OutputInterface extends Consumer<IEnvironment> {}

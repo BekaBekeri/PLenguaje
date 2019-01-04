@@ -121,7 +121,7 @@ public class MainWindow {
 				continue;
 			}
 			
-			MachineController<String> mController = new MachineController<String>(machine);
+			MachineController mController = new MachineController(machine);
 
 			MachinePanel pnl = new MachinePanel(new MachineCanvas(mController));
 			machinePanels.add(pnl);

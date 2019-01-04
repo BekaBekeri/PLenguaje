@@ -146,7 +146,8 @@ public class MachinePanel extends JPanel {
 		pnlMachine.add(lblMachineCanvas, BorderLayout.CENTER);
 		lblMachineCanvas.addMouseMotionListener(new CanvasMouseMotionListener());
 		lblMachineCanvas.addMouseListener(new CanvasMouseListener());
-		//simulator.setCurrentState(lblMachineCanvas.getStates().get(0));
+		
+		lblMachineCanvas.getController().getCurrentState().getOutput().accept(lblMachineCanvas.getController().getEnvironment());
 	}
 	
 	public MachineCanvas getMachineCanvas() {
@@ -254,7 +255,7 @@ public class MachinePanel extends JPanel {
 				lstInputModel.addElement(String.format("%s,%s -> %s", lblMachineCanvas.getController().getPreviousState().getName(), txtInput.getText().trim(), nextState.getName()));
 				MachinePanel.this.updateCurrentState(new DrawableState(nextState.getName()));
 				lastPaintedState = null;
-				nextState.getOutput().run();
+				nextState.getOutput().accept(lblMachineCanvas.getController().getEnvironment());
 				
 				txtInput.setText("");
 			} else {
