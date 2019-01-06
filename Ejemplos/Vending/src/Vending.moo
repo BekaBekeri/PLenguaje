@@ -1,3 +1,5 @@
+environment := VendingEnvironment;
+
 code1 := {: env.notify("V0") :};
 code2 := {: env.notify("V10") :};
 code3 := {: env.notify("V20") :};
@@ -12,7 +14,7 @@ code11 := {: env.notify("V10Bo") :};
 code12 := {: env.notify("V20Bo") :};
 code13 := {: env.notify("V30Bo") :};
 code14 := {: env.notify("V0ToD") :};
-code15 := {: env.notify("V0ToD") :};
+code15 := {: env.notify("V0To") :};
 
 
 define alfabeto1{

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class MachineController {
 	private IMooreMachine machine;
 	private MachineSimulator simulator;
-	private IEnvironment environment;
+	private VendingEnvironment environment;
 	
 	public MachineController(IMooreMachine machine) {
 		this.machine = machine;
@@ -21,7 +21,7 @@ public class MachineController {
 		return machine.getTransitions();
 	}
 	
-	public IEnvironment getEnvironment() {
+	public VendingEnvironment getEnvironment() {
 		return environment;
 	}
 	

@@ -1,88 +1,86 @@
 package moomaui.domain;
-
 public class Machines {
-	public static IMooreMachine exampleWeno() {
-		MooreMachine machine = new MooreMachine(); machine.setMachineName("Vending Machine");
-		
-		State st0 = new State("0 Sin"); st0.setOutput((IEnvironment env) -> System.out.println("0 centimos"));
-        State st1 = new State("10 Sin"); st1.setOutput((IEnvironment env) -> System.out.println("10 centimos"));
-        State st2 = new State("20 Sin"); st2.setOutput((IEnvironment env) -> System.out.println("20 centimos"));
-        State st3 = new State("30 Sin"); st3.setOutput((IEnvironment env) -> System.out.println("30 centimos"));
-
-		State st4 = new State("0 Be D"); st4.setOutput((IEnvironment env) -> System.out.println("0 centimos, he vendido una bebida y he devuelto 10 ctms"));
-		State st5 = new State("0 Be"); st5.setOutput((IEnvironment env) -> System.out.println("0 centimos y he vendido una bebida"));
-        State st6 = new State("10 Be"); st6.setOutput((IEnvironment env) -> System.out.println("10 centimos"));
-        State st7 = new State("20 Be"); st7.setOutput((IEnvironment env) -> System.out.println("20 centimos"));
-        State st8 = new State("30 Be"); st8.setOutput((IEnvironment env) -> System.out.println("30 centimos"));
-
-		State st9 = new State("0 Bo"); st9.setOutput((IEnvironment env) -> System.out.println("0 centimos"));
-        State st10 = new State("10 Bo"); st10.setOutput((IEnvironment env) -> System.out.println("10 centimos"));
-        State st11 = new State("20 Bo"); st11.setOutput((IEnvironment env) -> System.out.println("20 centimos"));
-        State st12 = new State("30 Bo"); st12.setOutput((IEnvironment env) -> System.out.println("30 centimos"));
-
-        State st13 = new State("0 To D"); st13.setOutput((IEnvironment env) -> System.out.println("0 centimos y he devuelto 10 ctms"));
-        State st14 = new State("0 To"); st14.setOutput((IEnvironment env) -> System.out.println("0 ctms y he vendido todo"));
-
-		Transition t0 = new Transition(st0, st1, "10");
-		Transition t1 = new Transition(st1, st2, "10");
-		Transition t2 = new Transition(st2, st3, "10");
-
-		Transition t3 = new Transition(st2, st5, "20");
-		Transition t4 = new Transition(st3, st4, "20");
-		Transition t5 = new Transition(st3, st9, "30");
-		
-
-		Transition t6 = new Transition(st4, st6, "10");
-		Transition t7 = new Transition(st5, st6, "10");
-		Transition t8 = new Transition(st6, st7, "10");
-		Transition t9 = new Transition(st7, st8, "10");
-		
-		Transition t10 = new Transition(st8, st14, "30");
-		
-		
-		Transition t11 = new Transition(st9, st10, "10");
-		Transition t12 = new Transition(st10, st11, "10");
-		Transition t13 = new Transition(st11, st12, "10");
-		
-		Transition t14 = new Transition(st11, st14, "20");		
-		Transition t15 = new Transition(st12, st13, "20");
-		
-		        
-		machine.addState(st0);
-		machine.addState(st1);
-		machine.addState(st2);
-        machine.addState(st3);
-        machine.addState(st4);
-        machine.addState(st5);
-        machine.addState(st6);
-        machine.addState(st7);
-        machine.addState(st8);
-        machine.addState(st9);
-        machine.addState(st10);
-        machine.addState(st11);
-        machine.addState(st12);
-        machine.addState(st13);
-        machine.addState(st14);
-        
-        machine.addTransition(t0);
+	public static IMooreMachine automaton1(){
+		MooreMachine machine = new MooreMachine();
+		machine.setMachineName("automaton1");
+		State V0 = new State("V0");
+		V0.setOutput((VendingEnvironment env) -> env.notify("V0"));
+		machine.addState(V0);
+		State V20Bo = new State("V20Bo");
+		V20Bo.setOutput((VendingEnvironment env) -> env.notify("V20Bo"));
+		machine.addState(V20Bo);
+		State V0To = new State("V0To");
+		V0To.setOutput((VendingEnvironment env) -> env.notify("V0ToD"));
+		machine.addState(V0To);
+		State V0Bo = new State("V0Bo");
+		V0Bo.setOutput((VendingEnvironment env) -> env.notify("V0Bo"));
+		machine.addState(V0Bo);
+		State V20 = new State("V20");
+		V20.setOutput((VendingEnvironment env) -> env.notify("V20"));
+		machine.addState(V20);
+		State V30Be = new State("V30Be");
+		V30Be.setOutput((VendingEnvironment env) -> env.notify("V30Be"));
+		machine.addState(V30Be);
+		State V10Bo = new State("V10Bo");
+		V10Bo.setOutput((VendingEnvironment env) -> env.notify("V10Bo"));
+		machine.addState(V10Bo);
+		State V10 = new State("V10");
+		V10.setOutput((VendingEnvironment env) -> env.notify("V10"));
+		machine.addState(V10);
+		State V30Bo = new State("V30Bo");
+		V30Bo.setOutput((VendingEnvironment env) -> env.notify("V30Bo"));
+		machine.addState(V30Bo);
+		State V0ToD = new State("V0ToD");
+		V0ToD.setOutput((VendingEnvironment env) -> env.notify("V0ToD"));
+		machine.addState(V0ToD);
+		State V0Be = new State("V0Be");
+		V0Be.setOutput((VendingEnvironment env) -> env.notify("V0Be"));
+		machine.addState(V0Be);
+		State V30 = new State("V30");
+		V30.setOutput((VendingEnvironment env) -> env.notify("V30"));
+		machine.addState(V30);
+		State V10Be = new State("V10Be");
+		V10Be.setOutput((VendingEnvironment env) -> env.notify("V10Be"));
+		machine.addState(V10Be);
+		State V20Be = new State("V20Be");
+		V20Be.setOutput((VendingEnvironment env) -> env.notify("V20Be"));
+		machine.addState(V20Be);
+		State V0BeD = new State("V0BeD");
+		V0BeD.setOutput((VendingEnvironment env) -> env.notify("V0BeD"));
+		machine.addState(V0BeD);
+		Transition t1 = new Transition (V0,V10,"10");
 		machine.addTransition(t1);
+		Transition t2 = new Transition (V10,V20,"10");
 		machine.addTransition(t2);
-        machine.addTransition(t3);
-        machine.addTransition(t4);
-        machine.addTransition(t5);
-        machine.addTransition(t6);
-        machine.addTransition(t7);
-        machine.addTransition(t8);
-        machine.addTransition(t9);
-        machine.addTransition(t10);
-        machine.addTransition(t11);
-        machine.addTransition(t12);
-        machine.addTransition(t13);
-        machine.addTransition(t14);
-        machine.addTransition(t15);
-        
-        machine.setInitialState(st0);
-
+		Transition t3 = new Transition (V20,V30,"10");
+		machine.addTransition(t3);
+		Transition t4 = new Transition (V20,V0Be,"20");
+		machine.addTransition(t4);
+		Transition t5 = new Transition (V30,V0BeD,"20");
+		machine.addTransition(t5);
+		Transition t6 = new Transition (V30,V0Bo,"30");
+		machine.addTransition(t6);
+		Transition t7 = new Transition (V0BeD,V10Be,"10");
+		machine.addTransition(t7);
+		Transition t8 = new Transition (V0Be,V10Be,"10");
+		machine.addTransition(t8);
+		Transition t9 = new Transition (V10Be,V20Be,"10");
+		machine.addTransition(t9);
+		Transition t10 = new Transition (V20Be,V30Be,"10");
+		machine.addTransition(t10);
+		Transition t11 = new Transition (V30Be,V0To,"30");
+		machine.addTransition(t11);
+		Transition t12 = new Transition (V0Bo,V10Bo,"10");
+		machine.addTransition(t12);
+		Transition t13 = new Transition (V10Bo,V20Bo,"10");
+		machine.addTransition(t13);
+		Transition t14 = new Transition (V20Bo,V30Bo,"10");
+		machine.addTransition(t14);
+		Transition t15 = new Transition (V20Bo,V0To,"20");
+		machine.addTransition(t15);
+		Transition t16 = new Transition (V30Bo,V0ToD,"20");
+		machine.addTransition(t16);
+		machine.setInitialState(V0);
 		return machine;
 	}
 }
