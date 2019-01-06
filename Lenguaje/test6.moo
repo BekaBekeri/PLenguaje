@@ -1,5 +1,6 @@
 /* 
-Identificador del automata sin numeros
+  Ejemplo creado a raiz de un bug encontrado.
+  el alfabeto no existe.
 */
 
 environment := VendingEnvironment;
@@ -11,7 +12,7 @@ define alfabeto1{
     out := code1;
 }
 
-automaton automata (alfabeto1){
+automaton automata (cosa){
     states := V0|code1, V1|code1;
     initial := V0;
     transitions{

@@ -80,6 +80,9 @@ class MyMoomaListener(moomaListener):
         self.error = False
         self.errorLog = []
 
+        self.automatonError = False
+        self.languageError = False
+
     def exitProgram(self, ctx:moomaParser.ProgramContext):
         if self.error:
             for error in self.errorLog:
@@ -101,8 +104,19 @@ class MyMoomaListener(moomaListener):
         if str(ctx.Ident()) in self.languages:
             self.error = True
             self.errorLog.append("Identificador de lenguaje ya definido: {}".format(str(ctx.Ident())))
+
+            # Create dummy language
+            self.languages.append(Language("Dummy"))
+            self.languageError = True
         else:
             self.languages.append(Language(str(ctx.Ident())))
+
+    def exitDefine(self, ctx:moomaParser.DefineContext):
+        if self.languageError:
+            # Remove dummy language
+            self.languages.pop()
+
+            self.languageError = False
 
     def enterEntrada(self, ctx:moomaParser.EntradaContext):
         # The language this goes in is the last one seen due to the way we traverse the tree
@@ -112,7 +126,7 @@ class MyMoomaListener(moomaListener):
             # Check for no repeated events
             if event not in lang.inputs:
                 lang.inputs.append(event)
-            else:
+            elif not self.languageError:
                 self.error = True
                 self.errorLog.append("Evento repetido: {}".format(event))
 
@@ -124,24 +138,40 @@ class MyMoomaListener(moomaListener):
             # Check for no repeated idents
             if ident not in lang.outputs:
                 lang.outputs.append(ident)
-            else:
+            elif not self.languageError:
                 self.error = True
                 self.errorLog.append("Identificador de salida repetido: {}".format(ident))
 
     def enterAutomaton(self, ctx:moomaParser.AutomatonContext):
         # Check if this automaton identier has already been defined
+        cosa1 = str(ctx.Ident(0))
+        cosa2 = ctx.Ident(1)
         if str(ctx.Ident(0)) in self.automatons:
             self.error = True
             self.errorLog.append("Identificador de automata ya definido: {}".format(str(ctx.Ident())))
+
+            # Create dummy automaton
+            self.automatons.append(Automaton("Dummy", Language("Dummy")))
+            self.automatonError = True
         else:
             # Nested ifs for the future: Maybe we want to specify error messages
             # Check if the language for the automaton exists
             if str(ctx.Ident(1)) not in self.languages:
                 self.error = True
                 self.errorLog.append("Lenguaje no definido: {}".format(str(ctx.Ident(1))))
+
+                # Create dummy automaton
+                self.automatons.append(Automaton("Dummy", Language("Dummy")))
+                self.automatonError = True
             else:
                 language = self.languages[self.languages.index(str(ctx.Ident(1)))]
-                self.automatons.append(Automaton(ctx.Ident(0), language))
+                self.automatons.append(Automaton(str(ctx.Ident(0)), language))
+
+    def exitAutomaton(self, ctx:moomaParser.AutomatonContext):
+        if self.automatonError:
+            # Remove dummy automaton
+            self.automatons.pop()
+            self.automatonError = False
 
 
     def enterStates(self, ctx:moomaParser.StatesContext):
@@ -154,13 +184,13 @@ class MyMoomaListener(moomaListener):
             state_out = state.split("|")[1]
 
             # Check for no repeated states
-            if state_ident in automaton.states:
+            if state_ident in automaton.states and not self.automatonError:
                 self.error = True
                 self.errorLog.append("Estado repetido en automata {}: {}".format(automaton.ident, state_ident))
 
             else:
                 # Check if output is in language
-                if state_out not in automaton.language.outputs:
+                if state_out not in automaton.language.outputs and not self.automatonError:
                     self.error = True
                     self.errorLog.append("Identificador de codigo no definido en automata {}, en el lenguaje: {}".format(automaton.ident, state_out))
                 else:
@@ -172,7 +202,7 @@ class MyMoomaListener(moomaListener):
         automaton.addinitial(str(ctx.Ident()))
 
         # Check if initial was correctly added
-        if automaton.initial is None:
+        if automaton.initial is None and not self.automatonError:
             self.error = True
             self.errorLog.append("Estado inicial incorrecto en automata {}".format(automaton.ident))
 
@@ -180,22 +210,23 @@ class MyMoomaListener(moomaListener):
         # The automaton this goes in is the last one seen due to the way we traverse the tree
         automaton = self.automatons[-1]
         transitions = ctx.l_transitions().getText().split(";")[:-1]
-        for trans in transitions:
-            origin = trans.split("|")[0]
-            event = trans.split("|")[1].split("->")[0]
-            dest = trans.split("|")[1].split("->")[1]
+        if not self.automatonError:
+            for trans in transitions:
+                origin = trans.split("|")[0]
+                event = trans.split("|")[1].split("->")[0]
+                dest = trans.split("|")[1].split("->")[1]
 
-            # Check if origin and dest are actual states of the automaton
-            if origin not in automaton.states or dest not in automaton.states:
-                self.error = True
-                self.errorLog.append("Origen ({}) o destino ({}) no definidos en el automata {}".format(origin, dest, automaton.ident))
-            else:
-                # Check if input is part of language
-                if event not in automaton.language.inputs:
+                # Check if origin and dest are actual states of the automaton
+                if origin not in automaton.states or dest not in automaton.states:
                     self.error = True
-                    self.errorLog.append("Evento {} no definido en el lenguaje del automata {}".format(event, automaton.ident))
+                    self.errorLog.append("Origen ({}) o destino ({}) no definidos en el automata {}".format(origin, dest, automaton.ident))
                 else:
-                    automaton.transitions.append(Transition(origin, event, dest))
+                    # Check if input is part of language
+                    if event not in automaton.language.inputs:
+                        self.error = True
+                        self.errorLog.append("Evento {} no definido en el lenguaje del automata {}".format(event, automaton.ident))
+                    else:
+                        automaton.transitions.append(Transition(origin, event, dest))
 
     def visitErrorNode(self, node:ErrorNode):
         self.error = True
