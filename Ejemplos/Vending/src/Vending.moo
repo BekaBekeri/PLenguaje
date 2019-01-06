@@ -17,12 +17,12 @@ code14 := {: env.notify("V0ToD") :};
 code15 := {: env.notify("V0To") :};
 
 
-define alfabeto1{
+define alfabeto{
     in := 10, 20, 30;
     out := code1, code2, code3, code4, code5, code6, code7, code8, code9, code10, code11, code12, code13, code14, code15;
 }
 
-automaton automaton1 (alfabeto1){
+automaton VendingMachine (alfabeto1){
     states := V0|code1, V10|code2, V20|code3, V30|code4, V0BeD|code5, V0Be|code6, V10Be|code7, V20Be|code8, V30Be|code9, V0Bo|code10, V10Bo|code11, V20Bo|code12, V30Bo|code13, V0ToD|code14, V0To|code15;
     initial := V0;
     transitions{

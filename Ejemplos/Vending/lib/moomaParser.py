@@ -1,4 +1,4 @@
-# Generated from .\src\mooma.g4 by ANTLR 4.7.1
+# Generated from .\mooma.g4 by ANTLR 4.7.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -7,7 +7,7 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30")
         buf.write("\u009e\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
@@ -31,30 +31,30 @@ def serializedATN():
         buf.write("\16\2.\3\3\2\2\2/\60\7\23\2\2\60\61\7\n\2\2\61\62\7\24")
         buf.write("\2\2\62\65\7\t\2\2\63\65\3\2\2\2\64/\3\2\2\2\64\63\3\2")
         buf.write("\2\2\65\5\3\2\2\2\66\67\5\b\5\2\678\5\6\4\28;\3\2\2\2")
-        buf.write("9;\3\2\2\2:\66\3\2\2\2:9\3\2\2\2;\7\3\2\2\2<=\7\25\2\2")
-        buf.write("=>\7\n\2\2>?\7\27\2\2?@\7\t\2\2@\t\3\2\2\2AB\5\f\7\2B")
+        buf.write("9;\3\2\2\2:\66\3\2\2\2:9\3\2\2\2;\7\3\2\2\2<=\7\24\2\2")
+        buf.write("=>\7\n\2\2>?\7\26\2\2?@\7\t\2\2@\t\3\2\2\2AB\5\f\7\2B")
         buf.write("C\5\n\6\2CF\3\2\2\2DF\3\2\2\2EA\3\2\2\2ED\3\2\2\2F\13")
-        buf.write("\3\2\2\2GH\7\22\2\2HI\7\25\2\2IJ\7\7\2\2JK\5\16\b\2KL")
+        buf.write("\3\2\2\2GH\7\22\2\2HI\7\24\2\2IJ\7\7\2\2JK\5\16\b\2KL")
         buf.write("\5\20\t\2LM\7\b\2\2M\r\3\2\2\2NO\7\r\2\2OP\7\n\2\2PQ\5")
         buf.write("\22\n\2QR\7\t\2\2R\17\3\2\2\2ST\7\16\2\2TU\7\n\2\2UV\5")
-        buf.write("\26\f\2VW\7\t\2\2W\21\3\2\2\2XY\7\26\2\2YZ\5\24\13\2Z")
+        buf.write("\26\f\2VW\7\t\2\2W\21\3\2\2\2XY\7\25\2\2YZ\5\24\13\2Z")
         buf.write("\23\3\2\2\2[\\\7\13\2\2\\_\5\22\n\2]_\3\2\2\2^[\3\2\2")
-        buf.write("\2^]\3\2\2\2_\25\3\2\2\2`a\7\25\2\2ab\5\30\r\2b\27\3\2")
+        buf.write("\2^]\3\2\2\2_\25\3\2\2\2`a\7\24\2\2ab\5\30\r\2b\27\3\2")
         buf.write("\2\2cd\7\13\2\2dg\5\26\f\2eg\3\2\2\2fc\3\2\2\2fe\3\2\2")
         buf.write("\2g\31\3\2\2\2hi\5\34\17\2ij\5\32\16\2jm\3\2\2\2km\3\2")
-        buf.write("\2\2lh\3\2\2\2lk\3\2\2\2m\33\3\2\2\2no\7\f\2\2op\7\25")
-        buf.write("\2\2pq\7\6\2\2qr\7\25\2\2rs\7\5\2\2st\7\7\2\2tu\5\36\20")
+        buf.write("\2\2lh\3\2\2\2lk\3\2\2\2m\33\3\2\2\2no\7\f\2\2op\7\24")
+        buf.write("\2\2pq\7\6\2\2qr\7\24\2\2rs\7\5\2\2st\7\7\2\2tu\5\36\20")
         buf.write("\2uv\5$\23\2vw\5&\24\2wx\7\b\2\2x\35\3\2\2\2yz\7\21\2")
-        buf.write("\2z{\7\n\2\2{|\5 \21\2|}\7\t\2\2}\37\3\2\2\2~\177\7\25")
-        buf.write("\2\2\177\u0080\7\4\2\2\u0080\u0081\7\25\2\2\u0081\u0082")
+        buf.write("\2z{\7\n\2\2{|\5 \21\2|}\7\t\2\2}\37\3\2\2\2~\177\7\24")
+        buf.write("\2\2\177\u0080\7\4\2\2\u0080\u0081\7\24\2\2\u0081\u0082")
         buf.write("\5\"\22\2\u0082!\3\2\2\2\u0083\u0084\7\13\2\2\u0084\u0087")
         buf.write("\5 \21\2\u0085\u0087\3\2\2\2\u0086\u0083\3\2\2\2\u0086")
         buf.write("\u0085\3\2\2\2\u0087#\3\2\2\2\u0088\u0089\7\20\2\2\u0089")
-        buf.write("\u008a\7\n\2\2\u008a\u008b\7\25\2\2\u008b\u008c\7\t\2")
+        buf.write("\u008a\7\n\2\2\u008a\u008b\7\24\2\2\u008b\u008c\7\t\2")
         buf.write("\2\u008c%\3\2\2\2\u008d\u008e\7\17\2\2\u008e\u008f\7\7")
         buf.write("\2\2\u008f\u0090\5(\25\2\u0090\u0091\7\b\2\2\u0091\'\3")
-        buf.write("\2\2\2\u0092\u0093\7\25\2\2\u0093\u0094\7\4\2\2\u0094")
-        buf.write("\u0095\5\22\n\2\u0095\u0096\7\3\2\2\u0096\u0097\7\25\2")
+        buf.write("\2\2\2\u0092\u0093\7\24\2\2\u0093\u0094\7\4\2\2\u0094")
+        buf.write("\u0095\5\22\n\2\u0095\u0096\7\3\2\2\u0096\u0097\7\24\2")
         buf.write("\2\u0097\u0098\7\t\2\2\u0098\u0099\5(\25\2\u0099\u009c")
         buf.write("\3\2\2\2\u009a\u009c\3\2\2\2\u009b\u0092\3\2\2\2\u009b")
         buf.write("\u009a\3\2\2\2\u009c)\3\2\2\2\n\64:E^fl\u0086\u009b")
@@ -77,8 +77,8 @@ class moomaParser ( Parser ):
     symbolicNames = [ "<INVALID>", "Flecha", "Separator", "Par_derecho", 
                       "Par_izquierdo", "Llave_izquierda", "Llave_derecha", 
                       "Punto_y_coma", "Asignacion", "Coma", "Auto", "In", 
-                      "Out", "Trans", "Ini", "Sta", "Def", "Env", "Clase", 
-                      "Ident", "Evento", "Codigo", "Comentario", "WS" ]
+                      "Out", "Trans", "Ini", "Sta", "Def", "Env", "Ident", 
+                      "Evento", "Codigo", "Comentario", "WS" ]
 
     RULE_program = 0
     RULE_environment = 1
@@ -125,12 +125,11 @@ class moomaParser ( Parser ):
     Sta=15
     Def=16
     Env=17
-    Clase=18
-    Ident=19
-    Evento=20
-    Codigo=21
-    Comentario=22
-    WS=23
+    Ident=18
+    Evento=19
+    Codigo=20
+    Comentario=21
+    WS=22
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -210,8 +209,8 @@ class moomaParser ( Parser ):
         def Asignacion(self):
             return self.getToken(moomaParser.Asignacion, 0)
 
-        def Clase(self):
-            return self.getToken(moomaParser.Clase, 0)
+        def Ident(self):
+            return self.getToken(moomaParser.Ident, 0)
 
         def Punto_y_coma(self):
             return self.getToken(moomaParser.Punto_y_coma, 0)
@@ -245,7 +244,7 @@ class moomaParser ( Parser ):
                 self.state = 46
                 self.match(moomaParser.Asignacion)
                 self.state = 47
-                self.match(moomaParser.Clase)
+                self.match(moomaParser.Ident)
                 self.state = 48
                 self.match(moomaParser.Punto_y_coma)
                 pass
