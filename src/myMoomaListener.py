@@ -86,7 +86,7 @@ class MyMoomaListener(moomaListener):
                 sys.stderr.write("{}\n".format(error))
 
     def enterEnvironment(self, ctx:moomaParser.EnvironmentContext):
-        self.env = str(ctx.Clase())
+        self.env = str(ctx.Ident())
 
     def enterOutput(self, ctx:moomaParser.OutputContext):
         # Check if a code identifier has been already defined

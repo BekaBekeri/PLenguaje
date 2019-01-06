@@ -152,10 +152,6 @@ Env
 /*
  * Generic tokens
  */
-
-Clase
-  : Letra+ ('.' Letra+)*
-  ;
  
 Ident
   : Letra (Letra | Digito)*
@@ -190,7 +186,7 @@ program
   ;
   
 environment
-  : Env Asignacion Clase Punto_y_coma
+  : Env Asignacion Ident Punto_y_coma
   | ;
 
 l_output
