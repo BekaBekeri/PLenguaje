@@ -39,7 +39,7 @@ def write_parsed_to_file(listener, package):
     if listener.error:
         print(os.linesep + "Errors detected, will not write files.")
     else:
-        package = "package {};{}".format(package, '\n')
+        package = "" if package == "" else "package {};{}".format(package, '\n')
         write_machines(listener, package)
         write_auxiliary(listener, package)
     

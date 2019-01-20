@@ -4,7 +4,7 @@ Sin Fallos
 
 */
 
-environment := Domain.Env;
+environment := Env;
 
 code1 := {: 
         printear("Hello");
