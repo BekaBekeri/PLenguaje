@@ -4,7 +4,7 @@ Una de las transiciones tiene un estado que no existe en el automata
 
 */
 
-environment := Domain.Env;
+environment := Env;
 
 code1 := {: 
         printear("Hello");

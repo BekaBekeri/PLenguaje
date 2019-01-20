@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class VendingEnvironment implements IEnvironment {
+public class GameAIEnvironment implements IEnvironment {
 	private HashMap<String, List<Runnable>> listeners;
 	
-	public VendingEnvironment() {
+	public GameAIEnvironment() {
 		listeners = new HashMap<>();
 	}
 	
@@ -26,10 +26,14 @@ public class VendingEnvironment implements IEnvironment {
 	
 	@Override
 	public String translate(Object input) {
-		if (input.toString().equalsIgnoreCase("Bebida")) {
-			return "20";
-		} else if (input.toString().equalsIgnoreCase("Bolsa")) {
-			return "30";
+		if (input.toString().equalsIgnoreCase("mirando")) {
+			return "1";
+		} else if (input.toString().equalsIgnoreCase("no mirando")) {
+			return "2";
+		} else if (input.toString().equalsIgnoreCase("no lejos")) {
+			return "5";
+		} else if (input.toString().equalsIgnoreCase("cerca atacar")) {
+			return "10";
 		} else {
 			return input.toString();
 		}
