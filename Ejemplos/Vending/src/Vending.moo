@@ -17,7 +17,7 @@ code14 := {: env.notify("V0ToD") :};
 code15 := {: env.notify("V0To") :};
 
 
-define alfabeto{
+define alfabeto1{
     in := 10, 20, 30;
     out := code1, code2, code3, code4, code5, code6, code7, code8, code9, code10, code11, code12, code13, code14, code15;
 }
