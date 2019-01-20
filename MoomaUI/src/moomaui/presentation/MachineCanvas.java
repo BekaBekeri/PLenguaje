@@ -29,7 +29,7 @@ public class MachineCanvas extends JDrawer{
 	public static final int FONT_SIZE = 15;
 	public static final int ARROW_SIZE = 7;
 	public static final int INITIAL_ARROW_SIZE = 11;
-	public static final int MACHINE_DEFAULT_RADIUS = 200;
+	public static final int MACHINE_DEFAULT_RADIUS = 160;
 	public static final int ARC_LINE_CONTROL_POINT_OFFSET = 75;
 	public static final int ARC_LINE_CONTROL_POINT_TEXT_OFFSET = ARC_LINE_CONTROL_POINT_OFFSET - 13;
 	public static final String TRANSITION_SEPARATOR = ", ";

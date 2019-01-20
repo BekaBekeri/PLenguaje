@@ -25,7 +25,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import moomaui.domain.IState;
-import moomaui.domain.VendingEnvironment;
+import moomaui.domain.GameAIEnvironment;
 import moomaui.presentation.drawing.DrawableState;
 
 public class MachinePanel extends JPanel {
@@ -155,8 +155,8 @@ public class MachinePanel extends JPanel {
 		lblMachineCanvas.getController().getCurrentState().getOutput().accept(lblMachineCanvas.getController().getEnvironment());
 	}
 	
-	private void setListeners(VendingEnvironment env) {
-		env.addListener("V0", () -> lstLogModel.addElement("Empezamos la simulación"));
+	private void setListeners(GameAIEnvironment env) {
+		env.addListener("V0", () -> lstLogModel.addElement("Empezamos la simulaciï¿½n"));
 		env.addListener("V10", () -> lstLogModel.addElement("Credito actual: 10 centimos"));
 		env.addListener("V20", () -> lstLogModel.addElement("Credito actual: 20 centimos"));
 		env.addListener("V30", () -> lstLogModel.addElement("Credito actual: 30 centimos"));
@@ -278,7 +278,7 @@ public class MachinePanel extends JPanel {
 				lstInputModel.addElement(String.format("%s,%s -> %s", lblMachineCanvas.getController().getPreviousState().getName(), txtInput.getText().trim(), nextState.getName()));
 				MachinePanel.this.updateCurrentState(new DrawableState(nextState.getName()));
 				lastPaintedState = null;
-				nextState.getOutput().accept((VendingEnvironment) lblMachineCanvas.getController().getEnvironment());
+				nextState.getOutput().accept((GameAIEnvironment) lblMachineCanvas.getController().getEnvironment());
 				
 				txtInput.setText("");
 			} else {
