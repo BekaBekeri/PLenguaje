@@ -1,9 +1,13 @@
 package moomaui.domain.game;
 
-public class CharacterPlayer extends Pawn {
+import java.util.LinkedList;
+import java.util.function.BiConsumer;
+
+public class Character extends Pawn {
 	public static final double VISION_CONE = Math.toRadians(55);
 	public static final int VISION_LENGTH = 250;
 	public static final int SPEED = 25;
+	private LinkedList<BiConsumer<Pawn, Integer>> damageListeners = new LinkedList<>();
 	
 	private double angle;
 
@@ -16,6 +20,16 @@ public class CharacterPlayer extends Pawn {
 		
 		// Normalize angle
 		this.angle = this.angle - (Math.PI * 2) * Math.floor((this.angle + Math.PI) / (Math.PI * 2));
+	}
+	
+	public void addDamageListener(BiConsumer<Pawn, Integer> listener) {
+		damageListeners.add(listener);
+	}
+	
+	@Override
+	public void applyDamage(Pawn instigator, int damage) {
+		super.applyDamage(instigator, damage);
+		damageListeners.forEach((BiConsumer<Pawn, Integer> listener) -> listener.accept(instigator, damage));
 	}
 	
 	public void moveInDirection(Direction[] directions) {

@@ -6,7 +6,7 @@ import moomaui.presentation.WorldCanvas;
 
 public class Enemy extends Pawn {
 	public static final int ATTACK_RANGE = (int) (WorldCanvas.STATE_RADIUS * 2.2);
-	public static final int ATTACK_POWER_PER_SECOND = 5;
+	public static final int ATTACK_POWER_PER_SECOND = 7;
 	public static final int SPEED = 17;
 	
 	private MachineController machine;
@@ -27,7 +27,7 @@ public class Enemy extends Pawn {
 	@Override
 	public void onTick(double seconds) {
 		time = seconds;
-		String translation = machine.getEnvironment().translate(this, (CharacterPlayer) world.getPawnsFromClass(CharacterPlayer.class).get(0));
+		String translation = machine.getEnvironment().translate(this, (Character) world.getPawnsFromClass(Character.class).get(0));
 		IState transitioned = machine.addNewInput(translation);
 		if (transitioned != null)
 			transitioned.getOutput().accept(machine.getEnvironment());
@@ -35,7 +35,7 @@ public class Enemy extends Pawn {
 	
 	private void onFlee() {
 		System.out.format("ID %d: Huyendo\n", this.id);
-		double[] movement = moveTowards((CharacterPlayer) world.getPawnsFromClass(CharacterPlayer.class).get(0));
+		double[] movement = moveTowards((Character) world.getPawnsFromClass(Character.class).get(0));
 		
 		x -= movement[0];
 		y -= movement[1];
@@ -47,7 +47,7 @@ public class Enemy extends Pawn {
 	
 	private void onWalk() {
 		System.out.format("ID %d: Andando\n", this.id);
-		double[] movement = moveTowards((CharacterPlayer) world.getPawnsFromClass(CharacterPlayer.class).get(0));
+		double[] movement = moveTowards((Character) world.getPawnsFromClass(Character.class).get(0));
 		
 		x += movement[0];
 		y += movement[1];
@@ -55,12 +55,12 @@ public class Enemy extends Pawn {
 	
 	private void onAttack() {
 		System.out.format("ID %d: Atacando\n", this.id);
-		Pawn ch = world.getPawnsFromClass(CharacterPlayer.class).get(0);
+		Pawn ch = world.getPawnsFromClass(Character.class).get(0);
 		
 		ch.applyDamage(this, (int) (ATTACK_POWER_PER_SECOND * time));
 	}
 	
-	private double[] moveTowards(CharacterPlayer ch) {
+	private double[] moveTowards(Character ch) {
 		double angle = WorldCanvas.angleBetweenPoints(this.getX(), ch.getX(), this.getY(), ch.getY());		
 		double unitsToMove = SPEED * time;
 

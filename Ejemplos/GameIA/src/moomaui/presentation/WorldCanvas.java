@@ -5,7 +5,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import moomaui.domain.game.CharacterPlayer;
+import moomaui.domain.game.Character;
 import moomaui.domain.game.Pawn;
 import moomaui.domain.game.World;
 import moomaui.presentation.drawing.DrawableCharacter;
@@ -47,8 +47,8 @@ public class WorldCanvas extends JDrawer{
 			Pawn pawn = world.getPawnsInWorld().get(i);
 			
 			DrawablePawn newPawn;
-			if (pawn instanceof CharacterPlayer)
-				newPawn = new DrawableCharacter((CharacterPlayer) pawn);
+			if (pawn instanceof Character)
+				newPawn = new DrawableCharacter((Character) pawn);
 			else
 				newPawn = new DrawablePawn(pawn);
 			
@@ -68,7 +68,7 @@ public class WorldCanvas extends JDrawer{
 		pawns.removeIf((DrawablePawn pawn) -> pawn.getID() == deadPawn.getId());
 		world.kill(deadPawn);
 		
-		if (deadPawn instanceof CharacterPlayer) {
+		if (deadPawn instanceof Character) {
 			for (Component comp : machinePanel.pnlControls.getComponents()) {
 				comp.setEnabled(false);
 			}

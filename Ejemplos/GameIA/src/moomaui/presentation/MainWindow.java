@@ -12,7 +12,7 @@ import javax.swing.SwingUtilities;
 import moomaui.domain.IMooreMachine;
 import moomaui.domain.MachineController;
 import moomaui.domain.Machines;
-import moomaui.domain.game.CharacterPlayer;
+import moomaui.domain.game.Character;
 import moomaui.domain.game.Enemy;
 import moomaui.domain.game.World;
 
@@ -85,7 +85,7 @@ public class MainWindow {
 			p.setMachine(new MachineController(machine));
 		}
 		
-		CharacterPlayer ch = (CharacterPlayer) world.spawnPawn(CharacterPlayer.class);
+		Character ch = (Character) world.spawnPawn(Character.class);
 		ch.setX(CHARACTER_POS[0]); ch.setY(CHARACTER_POS[1]);
 		ch.setHealth(100);
 		ch.setAngle(0);

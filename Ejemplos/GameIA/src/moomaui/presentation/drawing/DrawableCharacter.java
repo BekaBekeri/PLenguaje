@@ -6,7 +6,7 @@ import java.awt.geom.Arc2D;
 
 import moomaui.domain.game.Pawn;
 import moomaui.domain.game.World;
-import moomaui.domain.game.CharacterPlayer;
+import moomaui.domain.game.Character;
 import moomaui.presentation.WorldCanvas;
 
 public class DrawableCharacter extends DrawablePawn {
@@ -15,11 +15,11 @@ public class DrawableCharacter extends DrawablePawn {
 	protected double visionRadius;
 	
 	
-	public DrawableCharacter(CharacterPlayer ch) {
+	public DrawableCharacter(Character ch) {
 		super((Pawn) ch);
 		angle = ch.getAngle();
-		visionCone = CharacterPlayer.VISION_CONE;
-		visionRadius = CharacterPlayer.VISION_LENGTH;
+		visionCone = Character.VISION_CONE;
+		visionRadius = Character.VISION_LENGTH;
 		
 		innerColor = Color.GREEN;
 	}
@@ -40,7 +40,7 @@ public class DrawableCharacter extends DrawablePawn {
 	@Override
 	public void update(World world) {
 		super.update(world);
-		CharacterPlayer ch = (CharacterPlayer) world.getPawnFromId(id);
+		Character ch = (Character) world.getPawnFromId(id);
 		
 		angle = ch.getAngle();	
 	}

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import moomaui.domain.game.CharacterPlayer;
+import moomaui.domain.game.Character;
 import moomaui.domain.game.Enemy;
 import moomaui.presentation.WorldCanvas;
 
@@ -32,13 +32,13 @@ public class GameAIEnvironment implements IEnvironment {
 		return input.toString();
 	}
 	
-	public String translate(Enemy me, CharacterPlayer ch) {
+	public String translate(Enemy me, Character ch) {
 		double angle = WorldCanvas.angleBetweenPoints(ch.getX(), me.getX(), ch.getY(), me.getY()) * -1; // ??
 		double distance = WorldCanvas.euclideanDistance(ch.getX(), me.getX(), ch.getY(), me.getY());
 		
-		if (distance >= CharacterPlayer.VISION_LENGTH)
+		if (distance >= Character.VISION_LENGTH)
 			return "5";
-		else if ((ch.getAngle() - CharacterPlayer.VISION_CONE / 2) <= angle && (ch.getAngle() + CharacterPlayer.VISION_CONE / 2) >= angle)
+		else if ((ch.getAngle() - Character.VISION_CONE / 2) <= angle && (ch.getAngle() + Character.VISION_CONE / 2) >= angle)
 			return "1";
 		else if (distance <= Enemy.ATTACK_RANGE)
 			return "10";

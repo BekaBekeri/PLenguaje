@@ -23,7 +23,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import moomaui.domain.game.CharacterPlayer;
+import moomaui.domain.game.Character;
 import moomaui.domain.game.Direction;
 import moomaui.domain.game.Pawn;
 
@@ -265,12 +265,17 @@ public class MachinePanel extends JPanel {
 		this.lblWorldCanvas = canvas;
 		this.lblWorldCanvas.machinePanel = this;
 		pnlMachine.add(lblWorldCanvas, BorderLayout.CENTER);
+		canvas.getWorld().getPawnsFromClass(Character.class).forEach((Pawn ch) -> ((Character) ch).addDamageListener(this::logDamageToPlayer));
+	}
+	
+	private void logDamageToPlayer(Pawn instigator, int damage) {
+		lstLogModel.addElement(String.format("Player has suffered %d damage from Pawn %d", damage, instigator.getId()));
 	}
 	
 	public void logDeath(Pawn deadPawn, Pawn killerPawn) {
-		lstLogModel.addElement(String.format("Pawn %d has been killed by pawn %d\n", deadPawn.getId(), killerPawn.getId()));
+		lstLogModel.addElement(String.format("Player has been killed by pawn %d\n", deadPawn.getId(), killerPawn.getId()));
 		
-		if (deadPawn instanceof CharacterPlayer) {
+		if (deadPawn instanceof Character) {
 			lstLogModel.addElement("Your character has been killed!");
 			lstLogModel.addElement("Game stopped!");
 		}
@@ -283,7 +288,7 @@ public class MachinePanel extends JPanel {
 	private class BtnTickWorldActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			double time = Double.parseDouble(txtTickTime.getText());
-			CharacterPlayer ch = (CharacterPlayer) lblWorldCanvas.getWorld().getPawnsFromClass(CharacterPlayer.class).get(0);
+			Character ch = (Character) lblWorldCanvas.getWorld().getPawnsFromClass(Character.class).get(0);
 
 			ch.moveInDirection(directions.toArray(new Direction[0]));
 			directions.clear();
@@ -358,7 +363,7 @@ public class MachinePanel extends JPanel {
 	}
 	
 	private void rotateCharacter(int degrees) {
-		CharacterPlayer ch = (CharacterPlayer) lblWorldCanvas.getWorld().getPawnsFromClass(CharacterPlayer.class).get(0);
+		Character ch = (Character) lblWorldCanvas.getWorld().getPawnsFromClass(Character.class).get(0);
 		
 		ch.setAngle(ch.getAngle() + Math.toRadians(degrees));
 		lblWorldCanvas.updatePawns();
