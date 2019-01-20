@@ -80,13 +80,6 @@ try {
 writer.println(String.format("package %s;\nimport java.util.Stack;\n\npublic class MachineSimulator {\n\tprivate IMooreMachine machine;\n\tprivate IState currentState;\n\tprivate Stack<IState> previousStates = new Stack<>();\n\tprivate Stack<String> previousInputs = new Stack<>();\n\n\tpublic MachineSimulator(IMooreMachine machine) {\n\t\tthis.setMachine(machine);\n\t\tthis.currentState = this.machine.getInitialState();\n\t}\n\n\tpublic boolean addNewInput(String input) {\n\t\tIState destinationState = getMachine().getDestinationState(getCurrentState(), input);\n\t\tif (destinationState == null) {\n\t\t\treturn false;\n\t\t}\n\n\t\tpreviousStates.push(currentState);\n\t\tpreviousInputs.push(input);\n\t\tsetCurrentState(destinationState);\n\t\t//getCurrentState().getOutput().run();\n\t\treturn true;\n\t}\n\n\tpublic IState removeInput() {\n\t\tif (!previousStates.isEmpty()) {\n\t\t\tpreviousInputs.pop();\n\t\t\tIState previousState = previousStates.pop();\n\t\t\tthis.currentState = previousState;\n\t\t\treturn previousState;\n\t\t}\n\t\treturn null;\n\t}\n\n\tpublic IMooreMachine getMachine() {\n\t\treturn machine;\n\t}\n\n\tpublic void setMachine(IMooreMachine machine) {\n\t\tthis.machine = machine;\n\t}\n\n\tpublic IState getCurrentState() {\n\t\treturn currentState;\n\t}\n\n\tpublic void setCurrentState(IState currentState) {\n\t\tthis.currentState = currentState;\n\t}\n\n\tpublic IState getPreviousState() {\n\t\tif (previousStates.size() == 0) {\n\t\t\treturn null;\n\t\t} else {\n\t\t\treturn previousStates.peek();\n\t\t}\n\t}\n}",pack));
 writer.close();
 try {
-  writer = new PrintWriter("GenericEnvironment.java","UTF-8");
-  }catch( Exception e){
-    e.printStackTrace();
-  }
-writer.println(String.format("package %s;\n\npublic class GenericEnvironment<T> implements IEnvironment<T> {\n\n\t@Override\n\tpublic String translate(T input) {\n\t\treturn input.toString();\n\t}\n\n}\n",pack));
-writer.close();
-try {
   writer = new PrintWriter("OutputInterface.java","UTF-8");
   }catch( Exception e){
     e.printStackTrace();

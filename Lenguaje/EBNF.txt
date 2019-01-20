@@ -1,5 +1,5 @@
 PROGRAM ::= [ENVIRONMENT] {OUTPUT} {DEFINE} {AUTOMATON};
-ENVIRONMENT ::= "environment" ":=" {(LETRA|"."} ";";
+ENVIRONMENT ::= "environment" ":=" {LETRA} ";";
 DEFINE ::= "define" IDENT "{" ENTRADA ";" SALIDA ";" "}";
 AUTOMATON ::= "automaton" IDENT "(" IDENT ")" "{" STATES ";" INITIAL ";" TRANSITIONS "}";
 ENTRADA ::= "in" ":=" {EVENTO","}[EVENTO];

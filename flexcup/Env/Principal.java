@@ -1,6 +1,6 @@
 package Env;
 import java.util.Scanner;
-public class Program {
+public class Principal {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         MachineController mc = new MachineController(Machines.automata1());
