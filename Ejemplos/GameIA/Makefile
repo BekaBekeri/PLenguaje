@@ -12,7 +12,7 @@ MOOMA_GENERATED_PACKAGE = $(PARENT_PACKAGE).domain
 MOOMA_FILE := main.py
 MOOMA_OPTIONS := -p $(MOOMA_GENERATED_PACKAGE) -o $(DIRGEN)$(PARENT_PACKAGE)/domain
 
-MOOMA_AUTOMATON_FILE := $(DIRSRC)Vending.moo
+MOOMA_AUTOMATON_FILE := $(DIRSRC)GameAI.moo
 
 JC := javac
 JVM := java
@@ -24,7 +24,7 @@ else
     PATH_SEPARATOR := :
 endif
 
-all: folders compile_automaton copy_files compile_program run_program
+all: folders compile_automaton copy_files compile_program run
 
 compile_automaton:
 	$(PY3) $(DIRLIB)$(MOOMA_FILE) $(MOOMA_AUTOMATON_FILE) $(MOOMA_OPTIONS)
@@ -33,9 +33,9 @@ copy_files:
 	cp -r $(DIRSRC)moomaui $(DIRGEN)
 
 compile_program:
-	$(JC) $(DIRGEN)$(PARENT_PACKAGE)/domain/*.java $(DIRGEN)$(PARENT_PACKAGE)/presentation/*.java $(DIRGEN)$(PARENT_PACKAGE)/presentation/drawing/*.java -d $(DIRBIN)
+	$(JC) -encoding utf8 $(DIRGEN)$(PARENT_PACKAGE)/domain/*.java $(DIRGEN)$(PARENT_PACKAGE)/domain/game/*.java $(DIRGEN)$(PARENT_PACKAGE)/presentation/*.java $(DIRGEN)$(PARENT_PACKAGE)/presentation/drawing/*.java -d $(DIRBIN)
 
-run_program:
+run:
 	$(JVM) -cp bin moomaui.presentation.MainWindow
 
 folders:
@@ -47,4 +47,4 @@ clean:
 	rm -rf $(DIRBIN)
 	rm -rf $(DIRGEN)
 
-.PHONY: all, copy_files, compile_automaton, run_program, folders, clean
+.PHONY: all, copy_files, compile_automaton, run, folders, clean
