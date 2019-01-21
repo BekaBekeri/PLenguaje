@@ -1,0 +1,5 @@
+Ejecutar el makefile con el comando "make".
+Testeado tanto en Windows como en Ubuntu Linux. 
+Es posible que se cree una carpeta adicional llamada "src" dentro de "bin", si sucediera ejecutar el comando "make remove_folder".
+
+Podría ser necesario instalar la dependencia de ANTLR4 en python3, ejecutar el comando "make install"

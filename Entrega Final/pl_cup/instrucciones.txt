@@ -1,0 +1,16 @@
+Ejecutamos el comando para crear el analizador léxico:
+jflex moomaLexer.flex
+
+Ejecutamos el comando para crear el analizador sintáctico y semántico:
+java java_cup/Main moomaParser.cup
+
+Compilamos los analizadores:
+javac analex.java parser.java Main.java sym.java
+
+Analizamos el archivo mooma:
+java Main [Nombre].moo
+
+Compilamos todos los nuevos archivos generados:
+javac *.java
+
+Ejecutamos nuestro programa principal para que empiece a funcionar nuestra Máquina de Moore

@@ -1,0 +1,6 @@
+Para ejecutar el ejemplo es necesario ejecutar el comando "make"
+Adicionalmente, puede que sea necesario cambiar esta línea del Makefile:
+PY3 := python3
+Cambiando "python3" por el comando particular al sistema operativo.
+Por ejemplo, en Windows la línea quedaría:
+PY3 := py -3
